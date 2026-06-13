@@ -1,0 +1,15 @@
+{
+  "qa": {
+    "576": {
+      "baseUrl": "https://ogt-next-qa.int.thomsonreuters.com"
+    },
+    "568": {
+      "baseUrl": "https://ogt-next-qa.int.thomsonreuters.com"
+    }
+  },
+  "hlg": {
+    "453": {
+      "baseUrl": "https://ogt-next-hlg.int.thomsonreuters.com"
+    }
+  }
+}

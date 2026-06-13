@@ -1,0 +1,30 @@
+{
+  "files.associations": {
+    "*.feature": "feature"
+  },
+
+  // Onde estão os step definitions
+  "cucumberautocomplete.steps": [
+    "src/steps/**/*.ts"
+  ],
+  // Onde estão os feature files
+  "cucumberautocomplete.syncfeatures": "features/**/*.feature",
+
+  // Autocomplete só sugere steps que já existem no projeto
+  "cucumberautocomplete.strictGherkinCompletion": true,
+
+  // Ao digitar um step novo no feature, gera o esqueleto do step no .ts automaticamente
+  "cucumberautocomplete.smartSnippets": true,
+
+  // Permite usar "E" no feature para steps definidos com Given/When/Then
+  "cucumberautocomplete.stepsInvariants": true,
+
+  // Ensina a extensão que {string} nos steps equivale ao padrão "([^"]*)" do feature
+  "cucumberautocomplete.customParameters": [
+    {
+      "parameter": "string",
+      "value": "\"([^\"]*)\""
+    }
+  ],
+  "snyk.advanced.autoSelectOrganization": true
+}
