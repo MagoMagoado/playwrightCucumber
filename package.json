@@ -2,6 +2,7 @@
   "name": "playwright-base",
   "version": "1.0.0",
   "scripts": {
+    "test": "bddgen && playwright test",
     "test:ui": "bddgen && playwright test --ui"
   },
   "dependencies": {

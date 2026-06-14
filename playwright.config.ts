@@ -4,6 +4,7 @@ import { defineBddConfig } from 'playwright-bdd';
 const testDir = defineBddConfig({
   features: 'features/**/*.feature',
   steps: ['src/steps/**/*.ts', 'src/fixtures/**/*.ts'],
+  enrichReporterData: false,
 });
 
 export default defineConfig({
@@ -12,12 +13,17 @@ export default defineConfig({
   expect: { timeout: 60 * 1000 },
   workers: 1,
   retries: 0,
-  reporter: [['html'], ['list']],
+  reporter: [['list']],
+  // outputDir: '',
   use: {
+    channel: 'msedge',
     headless: false,
-    viewport: { width: 1920, height: 1080 },
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    trace: 'retain-on-failure',
+    viewport: null,
+    screenshot: 'off',
+    video: 'off',
+    trace: 'off',
+    launchOptions: {
+      args: ['--start-maximized'],
+    },
   },
 });
