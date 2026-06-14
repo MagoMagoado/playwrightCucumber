@@ -14,7 +14,7 @@ export default defineConfig({
   retries: 0,
   reporter: [['html'], ['list']],
   use: {
-    headless: process.env.HEADLESS !== 'false',
+    headless: false,
     viewport: { width: 1920, height: 1080 },
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

@@ -1,13 +1,20 @@
-import { type MapaElementos } from '@pages/CommonsPage';
+import { type MapaElementos } from './elementRegistry';
 
 export const camposExtrasElementos: MapaElementos = {
 
   BOTAO: {
     'Filtro: Adicionar': { seletor: '[id="tblItem-adicionar-adiantamento"]', waitAfter: 'loader' },
-    'Principal: Voltar': { seletor: '.bch-back-button', waitAfter: 'loader' },
+    'Grid Visualizar': '.grid-action-icon',
+    'Último editar grid': '#edit-72df6b00-85f9-46e1-aa86-f93a2456786e',
   },
 
-  CAMPO: {},
+  CAMPO: {
+    'Filtro: Entidade': '[name="dfEntidade"]',
+  },
+
+  COMBOBOX: {
+    'Filtro: Sistema': { seletor: '#cmbSistema', exact: true },
+  },
 
   LABEL: {},
 

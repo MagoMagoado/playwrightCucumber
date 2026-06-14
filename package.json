@@ -2,11 +2,7 @@
   "name": "playwright-base",
   "version": "1.0.0",
   "scripts": {
-    "bddgen": "bddgen",
-    "test": "bddgen && playwright test",
-    "test:headed": "bddgen && playwright test --headed",
-    "test:ui": "playwright test --ui",
-    "type-check": "tsc --noEmit"
+    "test:ui": "bddgen && playwright test --ui"
   },
   "dependencies": {
     "dotenv": "^17.4.2"

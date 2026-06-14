@@ -24,16 +24,12 @@ Given('que efetuo o login {string} utilizando o usuário {string}', async ({ log
 // Navegação
 // ──────────────────────────────────────────────────────────────
 
-When('clico no módulo {string}', async ({ commonsPage }, modulo: string) => {
-  await commonsPage.clicarModulo(modulo);
-});
-
-When('acesso pelo menu {string} a página {string}', async ({ commonsPage }, menuPrincipal: string, pagina: string) => {
-  await commonsPage.acessarPaginaPeloMenu(menuPrincipal, pagina);
-});
-
 When('recarrego a página', async ({ commonsPage }) => {
   await commonsPage.recarregarPagina();
+});
+
+When('acesso o menu {string}', async ({ commonsPage }, caminho: string) => {
+  await commonsPage.acessarMenuNavegacao(caminho.split(' > '));
 });
 
 // ──────────────────────────────────────────────────────────────
@@ -77,7 +73,14 @@ Then('o campo {string} deve conter o valor {string}', async ({ commonsPage }, no
   expect(valor).toBe(valorEsperado);
 });
 
-Then('o elemento {string} deve conter o texto {string}', async ({ commonsPage }, nome: string, textoEsperado: string) => {
-  const texto = await commonsPage.obterTexto(nome);
-  expect(texto).toContain(textoEsperado);
+Then('valido se {string} está {string}', async ({ camposExtrasPage }, nome: string, estado: string) => {
+  await camposExtrasPage.validarEstado(nome, estado);
+});
+
+// ──────────────────────────────────────────────────────────────
+// Utilitários
+// ──────────────────────────────────────────────────────────────
+
+When('pause', async ({ commonsPage }) => {
+    await commonsPage.pause();
 });

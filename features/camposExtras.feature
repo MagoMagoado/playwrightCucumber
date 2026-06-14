@@ -1,15 +1,25 @@
 # language: pt
 Funcionalidade: Validações Campos Extras
 
-  Cenário: 5344722 - Validações seção Campos Extras em telas
-    Dado que efetuo o login "NACIONAL" utilizando o usuário "AUT_IS_BR_01"
-    E clico no módulo "Import"
-    Quando acesso pelo menu "Financeiro" a página "Adiantamentos e Pagamentos"
+  Cenário: Validação Campos Extras
+    Dado que efetuo o login "NACIONAL" utilizando o usuário "LOGIN_1"
+    E clico no botão "Módulo: Export"
     E que estou no documento "CAMPOS_EXTRAS_PAG"
-    E clico no botão "Filtro: Adicionar"
-    # Validação Campo Extras - Seção ativada
-    Então visualizo o "SUBTÍTULO" com a mensagem "Campo Extra"
-    E clico no botão "Principal: Voltar"
-    # Validação Campo Extras - Seção desativada
-    E clico no botão "Filtro: Adicionar"
-    Então não visualizo o "SUBTÍTULO" com a mensagem "Campo Extra"
+    E acesso o menu "Dados Mestres > Configurações de Personalização > Campos Extras"
+    E seleciono no combobox "Filtro: Sistema" a opção "Export"
+    E preencho o campo "Filtro: Entidade" com "frm_AdiantamentoDespesas"
+    E clico no botão "Filtrar"
+    E clico no botão "Grid Visualizar"
+    E valido se "Último editar grid" está "DESABILITADO"
+    E pause
+    
+    # Dado que efetuo o login "NACIONAL" utilizando o usuário "LOGIN_1" //método loginPage
+    # E clico no botão "Módulo: Export" //botao de commonsElements
+    # E que estou no documento "CAMPOS_EXTRAS_PAG" // Deve carregar elementos de camposExtras no elementMap
+    # E acesso o menu "Dados Mestres > Configurações de Personalização > Campos Extras"
+    # E seleciono no combobox "Filtro: Sistema" a opção "Export" //botao de camposExtras
+    # E preencho o campo "Filtro: Entidade" com "frm_AdiantamentoDespesas" //botao de camposExtras
+    # E clico no botão "Filtrar" //botao de commonsElements
+    # E clico no botão "Grid Visualizar" //botao de camposExtras
+    # E valido se "Último editar grid" está "DESABILITADO" //método que deve ser lido de camposExtrasPage e não da commonsPage
+    # E pause

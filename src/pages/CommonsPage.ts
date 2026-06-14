@@ -1,26 +1,6 @@
-import { type Page, type Locator } from '@playwright/test';
-import { commonsElementos, buscarCaminhoMenu } from '@elements/commonsElements';
-
-type ElementoOpcoes = {
-  seletor: string;
-  index?: number;
-  waitAfter?: 'networkidle' | 'loader' | 'navigation' | 'login';
-  waitBefore?: 'networkidle' | 'loader' | 'navigation' | 'login';
-  texto?: string;
-  exact?: boolean;
-};
-
-/**
- * @param ElementConfig diz que pode ser só uma string normal para mapear ou pode usar das opções acima
- * @param MapaElementos  {CATEGORIA > (NOMEMAPEADO > opcoes mapeamento ou mapeamento simples)}
- EXEMPLO:
-  BOTAO: {
-    'Entrar': '#submit-btn',       // ElementConfig = string
-    'Filtro: Adicionar': { seletor: '...', waitAfter: 'loader' }  // ElementConfig = objeto
-  },
-*/
-export type ElementConfig = string | ElementoOpcoes;
-export type MapaElementos = Record<string, Record<string, ElementConfig>>;
+import { type Page, type Locator, expect } from '@playwright/test';
+import { commonsElementos } from '@elements/commonsElements';
+import { type ElementConfig, type MapaElementos } from '@elements/elementRegistry';
 
 export class CommonsPage {
   protected page: Page;
@@ -51,14 +31,23 @@ export class CommonsPage {
     }
   }
 
-  private resolveElemento(categoria: string, nome: string): ElementConfig {
+  protected resolveElemento(categoria: string, nome: string): ElementConfig {
     if (/^[.#\[]/.test(nome)) return nome;
     const elemento = this.elementMap[categoria]?.[nome];
     if (elemento !== undefined) return elemento as ElementConfig;
     throw new Error(`Elemento "${nome}" não encontrado na categoria "${categoria}"`);
   }
 
-  private toLocator(config: ElementConfig): Locator {
+  protected resolveElementoEmQualquerCategoria(nome: string): ElementConfig {
+    if (/^[.#\[]/.test(nome)) return nome;
+    for (const categoria of Object.keys(this.elementMap)) {
+      const elemento = this.elementMap[categoria]?.[nome];
+      if (elemento !== undefined) return elemento as ElementConfig;
+    }
+    throw new Error(`Elemento "${nome}" não encontrado em nenhuma categoria`);
+  }
+
+  protected toLocator(config: ElementConfig): Locator {
     if (typeof config === 'string') return this.page.locator(config);
     const { seletor, index, texto, exact } = config;
     let locator = this.page.locator(seletor);
@@ -106,35 +95,21 @@ export class CommonsPage {
     await this.aguardarCarregamentoPagina();
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // Módulo e Menu
-  // ──────────────────────────────────────────────────────────────
-
-  async clicarModulo(modulo: string): Promise<void> {
-    const config = this.resolveElemento('BOTAO', 'Módulos');
-    const locator = this.toLocator(config);
-    await locator.filter({ hasText: modulo }).first().click();
-    await this.aguardarCarregamentoPagina('navigation');
-  }
-
-  async acessarPaginaPeloMenu(menuPrincipal: string, pagina: string): Promise<void> {
+  async acessarMenuNavegacao(caminho: string[]): Promise<void> {
     await this.aguardarCarregamentoPagina('networkidle');
 
-    const configMenu = this.resolveElemento('MENUS_NAVEGACAO', 'Menu Principal');
-    await this.toLocator(configMenu).filter({ hasText: menuPrincipal }).first().click();
+    const menuPrincipal = this.resolveElemento('MENUS_NAVEGACAO', 'Menu Principal');
+    await this.toLocator(menuPrincipal).filter({ hasText: new RegExp(`^${caminho[0]}`) }).first().click();
 
-    const caminho = buscarCaminhoMenu(pagina);
-
-    for (let i = 0; i < caminho.length; i++) {
-      const config = this.resolveElemento('MENUS_NAVEGACAO', caminho[i]);
-      const locator = this.toLocator(config);
+    for (let i = 1; i < caminho.length; i++) {
+      const submenu = this.resolveElemento('MENUS_NAVEGACAO', 'Submenu');
+      const locator = this.toLocator(submenu).filter({ hasText: new RegExp(`^${caminho[i]}$`) }).first();
       const isUltimo = i === caminho.length - 1;
-
       if (isUltimo) {
-        await locator.first().click();
+        await locator.click();
         await this.aguardarCarregamentoPagina('navigation');
       } else {
-        await locator.first().hover();
+        await locator.hover();
       }
     }
   }
@@ -190,19 +165,28 @@ export class CommonsPage {
     }
   }
 
-  async obterTexto(nome: string): Promise<string> {
-    const config = this.resolveElemento('VALIDACAO', nome);
-    return (await this.toLocator(config).textContent()) ?? '';
-  }
-
   async obterValorCampo(nome: string): Promise<string> {
     const config = this.resolveElemento('CAMPO', nome);
     return await this.toLocator(config).inputValue();
   }
 
+  async validarEstado(nome: string, estado: string): Promise<void> {
+    const config = this.resolveElementoEmQualquerCategoria(nome);
+    const locator = this.toLocator(config);
+    if (estado === 'DESABILITADO') {
+      await expect(locator).toBeDisabled();
+    } else {
+      await expect(locator).toBeEnabled();
+    }
+  }
+
   // ──────────────────────────────────────────────────────────────
   // Utilitários
   // ──────────────────────────────────────────────────────────────
+
+  async pause(): Promise<void> {
+    await this.page.pause();
+  }
 
   async tirarScreenshot(nomeArquivo: string, fullPage = false): Promise<void> {
     await this.page.screenshot({ path: `screenshots/${nomeArquivo}.png`, fullPage });
