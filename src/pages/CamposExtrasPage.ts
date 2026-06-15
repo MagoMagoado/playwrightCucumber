@@ -2,10 +2,6 @@ import { type Page, expect } from '@playwright/test';
 import { CommonsPage } from './CommonsPage';
 import { camposExtrasElementos } from '@elements/camposExtrasElements';
 
-const ESTADOS_COM_CLASSE_DISABLED: Record<string, string> = {
-  'Último editar grid': '.disabled-icon',
-};
-
 export class CamposExtrasPage extends CommonsPage {
   constructor(page: Page) {
     super(page);
@@ -16,9 +12,10 @@ export class CamposExtrasPage extends CommonsPage {
     const config = this.buscarElemento('COMBOBOX', nome);
     const container = this.toLocator(config);
 
-    // abre o dropdown clicando no input interno do componente Angular
+    // abre o dropdown e filtra digitando no input interno do componente Angular
     const input = container.locator('input[role="combobox"]');
     await input.click({ timeout: 10000 });
+    await input.fill(opcao);
 
     // clica na opção pelo texto exato dentro da lista
     const opcaoLocator = container.locator('.bento-list-row').getByText(opcao, { exact: true });
@@ -26,14 +23,14 @@ export class CamposExtrasPage extends CommonsPage {
   }
 
   override async validarEstado(nome: string, estado: string): Promise<void> {
-    const seletorDisabled = ESTADOS_COM_CLASSE_DISABLED[nome];
-    if (seletorDisabled) {
-      const config = this.buscarElementoEmQualquerCategoria(nome);
-      const icone = this.toLocator(config).locator(seletorDisabled);
+    if (nome === 'Último editar grid') {
+      // esse elemento indica disabled via ícone filho .disabled-icon, não pelo atributo disabled
+      const elemento = this.toLocator(this.buscarElementoEmQualquerCategoria(nome));
+      await elemento.scrollIntoViewIfNeeded();
       if (estado === 'DESABILITADO') {
-        await expect(icone).toBeVisible();
+        await expect(elemento).toHaveClass(/disabled-icon/);
       } else {
-        await expect(icone).not.toBeVisible();
+        await expect(elemento).not.toHaveClass(/disabled-icon/);
       }
       return;
     }
