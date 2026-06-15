@@ -146,7 +146,7 @@ export class CommonsPage {
   async clicarBotao(nome: string): Promise<void> {
     const config = this.buscarElemento('BOTAO', nome);
     const locator = this.toLocator(config);
-    await locator.click();
+    await locator.click({ timeout: 10000 });
 
     if (typeof config === 'object' && config.waitAfter) {
       await this.aguardarCarregamentoPagina(config.waitAfter);

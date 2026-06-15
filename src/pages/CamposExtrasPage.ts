@@ -8,8 +8,8 @@ const ESTADOS_COM_CLASSE_DISABLED: Record<string, string> = {
 
 export class CamposExtrasPage extends CommonsPage {
   constructor(page: Page) {
-    super(page); // já carrega commonsElementos
-    this.carregarElementos(camposExtrasElementos);
+    super(page);
+    this.carregarElementosEmIframe(camposExtrasElementos);
   }
 
   override async selecionarCombobox(nome: string, opcao: string): Promise<void> {
@@ -18,7 +18,7 @@ export class CamposExtrasPage extends CommonsPage {
 
     // abre o dropdown clicando no input interno do componente Angular
     const input = container.locator('input[role="combobox"]');
-    await input.click();
+    await input.click({ timeout: 10000 });
 
     // clica na opção pelo texto exato dentro da lista
     const opcaoLocator = container.locator('.bento-list-row').getByText(opcao, { exact: true });
