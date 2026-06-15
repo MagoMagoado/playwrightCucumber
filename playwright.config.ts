@@ -4,7 +4,7 @@ import { defineBddConfig } from 'playwright-bdd';
 const testDir = defineBddConfig({
   features: 'features/**/*.feature',
   steps: ['src/steps/**/*.ts', 'src/fixtures/**/*.ts'],
-  enrichReporterData: false,
+  enrichReporterData: true,
 });
 
 export default defineConfig({
@@ -16,7 +16,8 @@ export default defineConfig({
   reporter: [['list']],
   // outputDir: '',
   use: {
-    channel: 'msedge',
+    channel: 'chrome',
+    // channel: 'msedge',
     headless: false,
     viewport: null,
     screenshot: 'off',

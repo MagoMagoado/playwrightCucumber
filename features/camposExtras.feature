@@ -11,7 +11,6 @@ Funcionalidade: Validações Campos Extras
     E clico no botão "Filtrar"
     E clico no botão "Grid Visualizar"
     E valido se "Último editar grid" está "DESABILITADO"
-    E pause
     
     # Dado que efetuo o login "NACIONAL" utilizando o usuário "LOGIN_1" //método loginPage
     # E clico no botão "Módulo: Export" //botao de commonsElements

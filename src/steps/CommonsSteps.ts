@@ -7,9 +7,13 @@ import { REGISTRO_DOCUMENTOS } from '@elements/elementRegistry';
 // ──────────────────────────────────────────────────────────────
 
 Given('que estou no documento {string}', async ({ commonsPage }, documento: string) => {
-  const elementos = REGISTRO_DOCUMENTOS[documento];
-  if (!elementos) throw new Error(`Documento "${documento}" não registrado em elementRegistry.ts`);
-  commonsPage.carregarElementos(elementos);
+  const registro = REGISTRO_DOCUMENTOS[documento];
+  if (!registro) throw new Error(`Documento "${documento}" não registrado em elementRegistry.ts`);
+  if (registro.usaIframe) {
+    commonsPage.carregarElementosEmIframe(registro.elementos);
+  } else {
+    commonsPage.carregarElementos(registro.elementos);
+  }
 });
 
 // ──────────────────────────────────────────────────────────────

@@ -5,6 +5,7 @@ import { type ElementConfig, type MapaElementos } from '@elements/elementRegistr
 export class CommonsPage {
   protected page: Page;
   private elementMap: MapaElementos = {};
+  private framedSelectors: Map<string, string> = new Map();
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +23,16 @@ export class CommonsPage {
    * @param Record<tipo_da_chave, tipo_do_valor> - dita o tipo que a variável é para o
    *                              TypeScript. Sem isso a linguagem reclama por não saber o formato
   */
+  carregarElementosEmIframe(elementos: MapaElementos): void {
+    this.carregarElementos(elementos);
+    for (const categoria of Object.values(elementos)) {
+      for (const config of Object.values(categoria)) {
+        const seletor = typeof config === 'string' ? config : config.seletor;
+        this.framedSelectors.set(seletor, 'iframe');
+      }
+    }
+  }
+
   carregarElementos(elementos: MapaElementos): void {
     for (const categoria in elementos) {
       this.elementMap[categoria] = {
@@ -31,14 +42,16 @@ export class CommonsPage {
     }
   }
 
-  protected resolveElemento(categoria: string, nome: string): ElementConfig {
+  protected buscarElemento(categoria: string, nome: string): ElementConfig {
+    // se começa com '.', '#' ou '[' já é um seletor CSS, não precisa buscar no mapa
     if (/^[.#\[]/.test(nome)) return nome;
     const elemento = this.elementMap[categoria]?.[nome];
     if (elemento !== undefined) return elemento as ElementConfig;
     throw new Error(`Elemento "${nome}" não encontrado na categoria "${categoria}"`);
   }
 
-  protected resolveElementoEmQualquerCategoria(nome: string): ElementConfig {
+  protected buscarElementoEmQualquerCategoria(nome: string): ElementConfig {
+    // se começa com '.', '#' ou '[' já é um seletor CSS, não precisa buscar no mapa
     if (/^[.#\[]/.test(nome)) return nome;
     for (const categoria of Object.keys(this.elementMap)) {
       const elemento = this.elementMap[categoria]?.[nome];
@@ -48,9 +61,21 @@ export class CommonsPage {
   }
 
   protected toLocator(config: ElementConfig): Locator {
-    if (typeof config === 'string') return this.page.locator(config);
-    const { seletor, index, texto, exact } = config;
-    let locator = this.page.locator(seletor);
+    const seletor = typeof config === 'string'
+      ? config
+      : config.seletor;
+
+    const frameSelector = this.framedSelectors.get(seletor);
+    const tipoContexto = frameSelector
+      ? this.page.frameLocator(frameSelector)
+      : this.page;
+
+    if (typeof config === 'string') {
+      return tipoContexto.locator(config);
+    }
+
+    const { index, texto, exact } = config;
+    let locator = tipoContexto.locator(seletor);
     if (texto) {
       locator = locator.filter({ hasText: exact ? new RegExp(`^${texto}$`) : texto });
     }
@@ -98,11 +123,11 @@ export class CommonsPage {
   async acessarMenuNavegacao(caminho: string[]): Promise<void> {
     await this.aguardarCarregamentoPagina('networkidle');
 
-    const menuPrincipal = this.resolveElemento('MENUS_NAVEGACAO', 'Menu Principal');
+    const menuPrincipal = this.buscarElemento('MENUS_NAVEGACAO', 'Menu Principal');
     await this.toLocator(menuPrincipal).filter({ hasText: new RegExp(`^${caminho[0]}`) }).first().click();
 
     for (let i = 1; i < caminho.length; i++) {
-      const submenu = this.resolveElemento('MENUS_NAVEGACAO', 'Submenu');
+      const submenu = this.buscarElemento('MENUS_NAVEGACAO', 'Submenu');
       const locator = this.toLocator(submenu).filter({ hasText: new RegExp(`^${caminho[i]}$`) }).first();
       const isUltimo = i === caminho.length - 1;
       if (isUltimo) {
@@ -119,7 +144,7 @@ export class CommonsPage {
   // ──────────────────────────────────────────────────────────────
 
   async clicarBotao(nome: string): Promise<void> {
-    const config = this.resolveElemento('BOTAO', nome);
+    const config = this.buscarElemento('BOTAO', nome);
     const locator = this.toLocator(config);
     await locator.click();
 
@@ -129,20 +154,21 @@ export class CommonsPage {
   }
 
   async preencherCampo(nome: string, valor: string): Promise<void> {
-    const config = this.resolveElemento('CAMPO', nome);
+    const config = this.buscarElemento('CAMPO', nome);
     const locator = this.toLocator(config);
     await locator.clear();
     await locator.fill(valor);
   }
 
   async selecionarCombobox(nome: string, opcao: string): Promise<void> {
-    const config = this.resolveElemento('COMBOBOX', nome);
+    const config = this.buscarElemento('COMBOBOX', nome);
     const locator = this.toLocator(config);
+    await locator.waitFor({ state: 'visible' });
     await locator.selectOption({ label: opcao });
   }
 
   async marcarCheckbox(nome: string, marcar: boolean): Promise<void> {
-    const config = this.resolveElemento('CHECKBOX', nome);
+    const config = this.buscarElemento('CHECKBOX', nome);
     const locator = this.toLocator(config);
     if (marcar) {
       await locator.check();
@@ -156,7 +182,7 @@ export class CommonsPage {
   // ──────────────────────────────────────────────────────────────
 
   async validarMensagem(tipo: string, mensagem: string, visivel = true): Promise<void> {
-    const config = this.resolveElemento('VALIDACAO', tipo);
+    const config = this.buscarElemento('VALIDACAO', tipo);
     const elemento = this.toLocator(config).filter({ hasText: mensagem });
     if (visivel) {
       await elemento.waitFor({ state: 'visible' });
@@ -166,12 +192,12 @@ export class CommonsPage {
   }
 
   async obterValorCampo(nome: string): Promise<string> {
-    const config = this.resolveElemento('CAMPO', nome);
+    const config = this.buscarElemento('CAMPO', nome);
     return await this.toLocator(config).inputValue();
   }
 
   async validarEstado(nome: string, estado: string): Promise<void> {
-    const config = this.resolveElementoEmQualquerCategoria(nome);
+    const config = this.buscarElementoEmQualquerCategoria(nome);
     const locator = this.toLocator(config);
     if (estado === 'DESABILITADO') {
       await expect(locator).toBeDisabled();

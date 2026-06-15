@@ -15,7 +15,7 @@ export class CamposExtrasPage extends CommonsPage {
   override async validarEstado(nome: string, estado: string): Promise<void> {
     const seletorDisabled = ESTADOS_COM_CLASSE_DISABLED[nome];
     if (seletorDisabled) {
-      const config = this.resolveElementoEmQualquerCategoria(nome);
+      const config = this.buscarElementoEmQualquerCategoria(nome);
       const icone = this.toLocator(config).locator(seletorDisabled);
       if (estado === 'DESABILITADO') {
         await expect(icone).toBeVisible();

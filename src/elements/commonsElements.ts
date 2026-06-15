@@ -4,7 +4,7 @@ export const commonsElementos: MapaElementos = {
 
   BOTAO: {
     'Entrar':   '#submit-btn',
-    'Módulo: Export': { seletor: '[class="module-box ng-star-inserted"]', texto: 'Export' },
+    'Módulo: Export': { seletor: '[class="module-box ng-star-inserted"]', texto: 'Export', exact: true },
     'Filtrar': '#base-button-filter',
   },
 
