@@ -12,6 +12,19 @@ export class CamposExtrasPage extends CommonsPage {
     this.carregarElementos(camposExtrasElementos);
   }
 
+  override async selecionarCombobox(nome: string, opcao: string): Promise<void> {
+    const config = this.buscarElemento('COMBOBOX', nome);
+    const container = this.toLocator(config);
+
+    // abre o dropdown clicando no input interno do componente Angular
+    const input = container.locator('input[role="combobox"]');
+    await input.click();
+
+    // clica na opção pelo texto exato dentro da lista
+    const opcaoLocator = container.locator('.bento-list-row').getByText(opcao, { exact: true });
+    await opcaoLocator.click();
+  }
+
   override async validarEstado(nome: string, estado: string): Promise<void> {
     const seletorDisabled = ESTADOS_COM_CLASSE_DISABLED[nome];
     if (seletorDisabled) {

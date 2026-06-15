@@ -128,7 +128,7 @@ export class CommonsPage {
 
     for (let i = 1; i < caminho.length; i++) {
       const submenu = this.buscarElemento('MENUS_NAVEGACAO', 'Submenu');
-      const locator = this.toLocator(submenu).filter({ hasText: new RegExp(`^${caminho[i]}$`) }).first();
+      const locator = this.toLocator(submenu).getByText(caminho[i], { exact: true }).first();
       const isUltimo = i === caminho.length - 1;
       if (isUltimo) {
         await locator.click();

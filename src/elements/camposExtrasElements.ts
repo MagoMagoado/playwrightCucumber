@@ -13,7 +13,7 @@ export const camposExtrasElementos: MapaElementos = {
   },
 
   COMBOBOX: {
-    'Filtro: Sistema': { seletor: '#cmbSistema', exact: true },
+    'Filtro: Sistema': '#cmbSistema',
   },
 
   LABEL: {},
