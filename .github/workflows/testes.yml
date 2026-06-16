@@ -30,7 +30,7 @@ jobs:
 
       # Baixa o Chromium bundled do Playwright (no CI não usa channel: chrome)
       - name: Instalar Chromium do Playwright
-        run: npx playwright install --with-deps chromium
+        run: node_modules/.bin/playwright install --with-deps chromium
 
       # Roda os testes (executa "bddgen && playwright test" do package.json)
       - name: Rodar testes
