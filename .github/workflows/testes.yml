@@ -24,13 +24,13 @@ jobs:
           node-version: 20
           cache: 'npm'      # evita baixar node_modules de novo se package.json não mudou
 
-      # Instala as dependências do package.json
+      # Instala as dependências do package.json (npm ci é a versão otimizada para CI)
       - name: Instalar dependências
-        run: npm install
+        run: npm ci
 
       # Baixa o Chromium bundled do Playwright (no CI não usa channel: chrome)
       - name: Instalar Chromium do Playwright
-        run: npx --no playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium
 
       # Roda os testes (executa "bddgen && playwright test" do package.json)
       - name: Rodar testes
