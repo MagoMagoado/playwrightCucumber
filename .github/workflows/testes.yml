@@ -1,0 +1,47 @@
+name: Testes Playwright
+
+# ─── Quando esse workflow vai rodar ───────────────────────────
+on:
+  workflow_dispatch:        # permite disparar manualmente pelo GitHub
+  push:
+    branches: [master]        # roda automaticamente a cada push na main
+
+# ─── O que vai ser executado ──────────────────────────────────
+jobs:
+  testes:
+    runs-on: ubuntu-latest  # máquina virtual Linux do GitHub (zerada a cada run)
+
+    steps:
+
+      # Baixa o código do repositório para dentro da VM
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Instala o Node.js na VM
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'      # evita baixar node_modules de novo se package.json não mudou
+
+      # Instala as dependências do package.json
+      - name: Instalar dependências
+        run: npm install
+
+      # Baixa o Chromium bundled do Playwright (no CI não usa channel: chrome)
+      - name: Instalar Chromium do Playwright
+        run: npx playwright install --with-deps chromium
+
+      # Roda os testes (executa "bddgen && playwright test" do package.json)
+      - name: Rodar testes
+        run: npm test
+
+      # Publica o relatório HTML como artefato — aparece na aba Actions do GitHub
+      # Roda sempre, mesmo se os testes falharem, para você ver o que aconteceu
+      - name: Publicar relatório
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 15

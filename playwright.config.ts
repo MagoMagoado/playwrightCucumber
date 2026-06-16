@@ -13,12 +13,14 @@ export default defineConfig({
   expect: { timeout: 60 * 1000 },
   workers: 1,
   retries: 0,
-  reporter: [['list']],
+  reporter: process.env.CI
+    ? [['github'], ['html', { open: 'never' }]]
+    : [['list']],
   // outputDir: '',
   use: {
-    channel: 'chrome',
     // channel: 'msedge',
-    headless: false,
+    headless: !!process.env.CI,
+    channel: process.env.CI ? undefined : 'chrome',
     viewport: null,
     screenshot: 'off',
     video: 'off',
