@@ -1,6 +1,6 @@
 import { type MapaElementos } from './elementRegistry';
 
-export const camposExtrasElementos: MapaElementos = {
+export const homeElementos: MapaElementos = {
 
   BOTAO: {
     'Campos Extras: Filtrar': '#base-button-filter',
@@ -11,12 +11,14 @@ export const camposExtrasElementos: MapaElementos = {
 
   CAMPO: {
     'Filtro: Entidade': '[name="dfEntidade"]',
+    'Produto Nome' : { seletor: '[data-test="product-name"]'},
   },
 
   COMBOBOX: {
-    'Filtro: Sistema': '#cmbSistema',
+    'Filtro: Sort': '#filters select.form-select',
   },
 
-  LABEL: {},
-
+  CHECKBOX: {
+    'Filtro: Hammer': { seletor: 'fieldset .checkbox input[name="category_id"]', texto: 'Hammer', exact: true }
+  },
 };

@@ -6,7 +6,6 @@ import loginInfo from '@config/loginInfo.json';
 type LoginInfo = {
   username: string;
   password: string;
-  language: string;
 };
 
 /**
@@ -31,10 +30,9 @@ export class LoginPage extends CommonsPage {
 
     await this.page.goto(`${baseUrl}/module-selection/${companyId}/login`);
 
-    await this.preencherCampo('Usuário', user.username);
-    await this.preencherCampo('Senha', user.password);
-    await this.selecionarCombobox('Idioma', user.language);
-    await this.clicarBotao('Entrar');
+    await this.preencherCampo('Email', user.username);
+    await this.preencherCampo('Password', user.password);
+    await this.clicarBotao('Login');
     await this.aguardarCarregamentoPagina('login');
   }
 }

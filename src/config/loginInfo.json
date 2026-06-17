@@ -1,7 +1,14 @@
 {
-  "LOGIN_1": {
-    "username": "ISABELLA",
-    "password": "aut12345",
-    "language": "Português"
+  "admin": {
+    "username": "admin@practicesoftwaretesting.com",
+    "password": "welcome01"
+  },
+  "Jano Doe": {
+    "username": "customer@practicesoftwaretesting.com",
+    "password": "welcome01"
+  },
+  "Jack Howe": {
+    "username": "customer2@practicesoftwaretesting.com",
+    "password": "welcome01"
   }
 }

@@ -1,11 +1,11 @@
 import { type Page, expect } from '@playwright/test';
 import { CommonsPage } from './CommonsPage';
-import { camposExtrasElementos } from '@elements/camposExtrasElements';
+import { homeElementos } from '@elements/homeElements';
 
-export class CamposExtrasPage extends CommonsPage {
+export class HomePage extends CommonsPage {
   constructor(page: Page) {
     super(page);
-    this.carregarElementosEmIframe(camposExtrasElementos);
+    this.carregarElementosEmIframe(homeElementos);
   }
 
   override async selecionarCombobox(nome: string, opcao: string): Promise<void> {

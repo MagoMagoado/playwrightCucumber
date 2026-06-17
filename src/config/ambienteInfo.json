@@ -1,15 +1,15 @@
 {
   "qa": {
-    "576": {
-      "baseUrl": "https://ogt-next-qa.int.thomsonreuters.com"
+    "base1": {
+      "baseUrl": "https://practicesoftwaretesting.com/"
     },
-    "568": {
-      "baseUrl": "https://ogt-next-qa.int.thomsonreuters.com"
+    "base2": {
+      "baseUrl": "..."
     }
   },
   "hlg": {
-    "453": {
-      "baseUrl": "https://ogt-next-hlg.int.thomsonreuters.com"
+    "base3": {
+      "baseUrl": "..."
     }
   }
 }

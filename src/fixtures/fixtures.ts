@@ -2,7 +2,7 @@ import { test as base, createBdd } from 'playwright-bdd';
 import { type Page } from '@playwright/test';
 import { CommonsPage } from '@pages/CommonsPage';
 import { LoginPage } from '@pages/LoginPage';
-import { CamposExtrasPage } from '@pages/CamposExtrasPage';
+import { HomePage } from '@pages/homePage';
 
 /**
  * Gerencia qual page está ativa durante o teste.
@@ -18,7 +18,7 @@ export class PageContext {
   constructor(page: Page) {
     this.activePage = new CommonsPage(page);
     this.paginas = new Map<string, CommonsPage>([
-      ['CAMPOS EXTRAS', new CamposExtrasPage(page)],
+      ['HOME', new HomePage(page)],
     ]);
   }
 

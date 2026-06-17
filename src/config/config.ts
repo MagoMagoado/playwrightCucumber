@@ -1,8 +1,8 @@
 import ambienteInfo from './ambienteInfo.json';
 
 const ENVIRONMENT = 'qa';
-const COMPANY_NAC = '576';
-const COMPANY_INT = '568';
+const COMPANY_NAC = 'base1';
+const COMPANY_INT = 'base2';
 
 export const config = {
   environment: ENVIRONMENT,
