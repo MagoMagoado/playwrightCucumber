@@ -3,7 +3,7 @@ import { type MapaElementos } from './elementRegistry';
 export const commonsElementos: MapaElementos = {
 
   BOTAO: {
-    'Sign in': { seletor: '[data-test="login-submit"]', texto: 'Sign in', exact: true },
+    'Sign in': { seletor: '[data-test="nav-sign-in"]', texto: 'Sign in', exact: true },
     'Login': { seletor: '[data-test="login-submit"]', texto: 'Login', exact: true },
   },
 
@@ -26,8 +26,8 @@ export const commonsElementos: MapaElementos = {
   },
 
   MENUS_NAVEGACAO: {
-    'Menu Principal': 'button.dropdown-toggle.btn-toolbar',
-    'Submenu':        '.dropdown-submenu > a',
+    'Menu Principal': '[id="navbarSupportedContent"]',
+    'Submenu':        '.dropdown-menu a',
   },
 
   ENDPOINT: {

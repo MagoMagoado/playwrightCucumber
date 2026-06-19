@@ -10,6 +10,7 @@ Funcionalidade: Validações de teste
 
   Cenário: Validações Filtro Home
     Dado acesso o menu "Home"
+    E acesso o menu "Categories > Hand Tools"
     # E valido que endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
     Quando preencho o combobox "Filtro: Sort" com "Name (A - Z)"
@@ -28,11 +29,11 @@ Funcionalidade: Validações de teste
     #   | Chisels Set        |
     #   | ...                |
     Então valido os campos por label
-      | Nome         | TIPO  | VALOR         |
-      | Produto Nome | CAMPO | Angled Spanne |
-      | Produto Nome | CAMPO | Belt Sander   |
-      | Produto Nome | CAMPO | Bolt Cutters  |
-      | Produto Nome | CAMPO | Chisels Set   |
+      | Nome         | TIPO  | VALOR              |
+      | Produto Nome | CAMPO |  Adjustable Wrench |
+      | Produto Nome | CAMPO | Angled Spanne      |
+      | Produto Nome | CAMPO | Bolt Cutters       |
+      | Produto Nome | CAMPO | Chisels Set        |
     Quando preencho o campo "Filtro: Search" com "Hammer"
     E clico no botão "Search"
     # E valido se endpoint "Produtos Home" contém em "data" valores
