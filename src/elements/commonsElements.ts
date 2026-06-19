@@ -3,8 +3,8 @@ import { type MapaElementos } from './elementRegistry';
 export const commonsElementos: MapaElementos = {
 
   BOTAO: {
-    'Login':   '[data-test="login-submit"]',
-    'Módulo: Export': { seletor: '[class="module-box ng-star-inserted"]', texto: 'Export', exact: true },
+    'Sign in': { seletor: '[data-test="login-submit"]', texto: 'Sign in', exact: true },
+    'Login': { seletor: '[data-test="login-submit"]', texto: 'Login', exact: true },
   },
 
   CAMPO: {
@@ -31,8 +31,8 @@ export const commonsElementos: MapaElementos = {
   },
 
   ENDPOINT: {
-    'Dados Usuário': { url: 'api.practicesoftwaretesting.com/users/me', method: 'GET' },
-    'Produtos Home': { url: '/api.practicesoftwaretesting.com/products', method: 'GET' },
+    'Dados Usuário': { seletor: 'api.practicesoftwaretesting.com/users/me', methodURL: 'GET' },
+    'Produtos Home': { seletor: '/api.practicesoftwaretesting.com/products', methodURL: 'GET' },
   }
 
 };

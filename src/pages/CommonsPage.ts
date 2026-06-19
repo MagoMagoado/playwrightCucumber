@@ -146,6 +146,7 @@ export class CommonsPage {
   async clicarBotao(nome: string): Promise<void> {
     const config = this.buscarElemento('BOTAO', nome);
     const locator = this.toLocator(config);
+    // await locator.waitFor({ state: 'visible' });
     await locator.click({ timeout: 10000 });
 
     if (typeof config === 'object' && config.waitAfter) {
@@ -196,6 +197,11 @@ export class CommonsPage {
     return await this.toLocator(config).inputValue();
   }
 
+  async validarValorCampo(nome: string, valorEsperado: string): Promise<void> {
+    const valor = await this.obterValorCampo(nome);
+    expect(valor).toBe(valorEsperado);
+  }
+
   async validarEstado(nome: string, estado: string): Promise<void> {
     const config = this.buscarElementoEmQualquerCategoria(nome);
     const locator = this.toLocator(config);
@@ -203,6 +209,34 @@ export class CommonsPage {
       await expect(locator).toBeDisabled();
     } else {
       await expect(locator).toBeEnabled();
+    }
+  }
+
+  async validarCheckboxEstado(nome: string, estado: string): Promise<void> {
+    const config = this.buscarElemento('CHECKBOX', nome);
+    const locator = this.toLocator(config);
+    if (estado === 'MARCADO') {
+      await expect(locator).toBeChecked();
+    } else {
+      await expect(locator).not.toBeChecked();
+    }
+  }
+
+  async validarOpcoesCombobox(nome: string, opcoesEsperadas: string[]): Promise<void> {
+    const locator = this.toLocator(this.buscarElemento('COMBOBOX', nome));
+    const opcoes = locator.locator('option');
+
+    for (const opcaoEsperada of opcoesEsperadas) {
+      await expect(opcoes.filter({ hasText: opcaoEsperada.trim() })).toBeAttached();
+    }
+  }
+
+  // elementos que repetem o mesmo seletor com textos distintos (ex: lista de produtos).
+  async validarCamposPorLabel(linhas: { Nome: string; TIPO: string; VALOR: string }[]): Promise<void> {
+    for (const { Nome, TIPO, VALOR } of linhas) {
+      const config = this.buscarElemento(TIPO.toUpperCase(), Nome);
+      const locator = this.toLocator(config).filter({ hasText: new RegExp(`^${VALOR.trim()}$`) });
+      await expect(locator).toBeVisible();
     }
   }
 

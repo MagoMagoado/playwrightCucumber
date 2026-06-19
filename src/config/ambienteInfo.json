@@ -1,5 +1,5 @@
 {
-  "qa": {
+  "QA": {
     "base1": {
       "baseUrl": "https://practicesoftwaretesting.com/"
     },
@@ -7,7 +7,7 @@
       "baseUrl": "..."
     }
   },
-  "hlg": {
+  "HLG": {
     "base3": {
       "baseUrl": "..."
     }

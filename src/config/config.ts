@@ -1,21 +1,21 @@
 import ambienteInfo from './ambienteInfo.json';
 
-const ENVIRONMENT = 'qa';
-const COMPANY_NAC = 'base1';
-const COMPANY_INT = 'base2';
+const ENVIRONMENT = 'QA';
+const COMPANY_NAC_ID = 'base1';
+const COMPANY_INT_ID = 'base2';
 
 export const config = {
   environment: ENVIRONMENT,
-  companyNac:  COMPANY_NAC,
-  companyInt:  COMPANY_INT,
+  companyNac:  COMPANY_NAC_ID,
+  companyInt:  COMPANY_INT_ID,
 };
 
 /** Estrutura de ambienteInfo.json: (ambiente qa/hlg) > (companyId > { baseUrl }) */
 type AmbienteInfo = Record<string, Record<string, { baseUrl: string }>>;
 
-export function getAmbiente(tipoLogin: string): { baseUrl: string; companyId: string } {
-  const isNacional = tipoLogin.toUpperCase() === 'NACIONAL';
-  const companyId  = isNacional ? config.companyNac : config.companyInt;
+export function getAmbiente(tipoAcesso: string): { baseUrl: string; companyId: string } {
+  let isBaseQA = tipoAcesso.toUpperCase() === 'QA';
+  const companyId  = isBaseQA ? config.companyNac : config.companyInt;
   const ambiente    = (ambienteInfo as AmbienteInfo)[config.environment][companyId];
 
   return { baseUrl: ambiente.baseUrl, companyId };

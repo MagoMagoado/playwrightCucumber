@@ -24,12 +24,13 @@ export class LoginPage extends CommonsPage {
     super(page);
   }
 
-  async efetuarLogin(tipoLogin: string, usuarioId: string): Promise<void> {
-    const user = getUser(usuarioId);
+  async acessoSistema(tipoLogin: string): Promise<void> {
     const { baseUrl, companyId } = getAmbiente(tipoLogin);
+    await this.page.goto(`${baseUrl}`);
+  }
 
-    await this.page.goto(`${baseUrl}/module-selection/${companyId}/login`);
-
+  async efetuarLogin(usuarioId: string): Promise<void> {
+    const user = getUser(usuarioId);
     await this.preencherCampo('Email', user.username);
     await this.preencherCampo('Password', user.password);
     await this.clicarBotao('Login');

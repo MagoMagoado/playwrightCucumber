@@ -5,6 +5,7 @@ type ElementoOpcoes = {
   waitBefore?: 'networkidle' | 'loader' | 'navigation' | 'login';
   texto?: string;
   exact?: boolean;
+  methodURL?: string;
 };
 
 /**
@@ -12,8 +13,11 @@ type ElementoOpcoes = {
  * @param MapaElementos  {CATEGORIA > (NOMEMAPEADO > opcoes mapeamento ou mapeamento simples)}
  EXEMPLO:
   BOTAO: {
-    'Entrar': '#submit-btn',       // ElementConfig = string
+    'Entrar': '#submit-btn',                                       // ElementConfig = string
     'Filtro: Adicionar': { seletor: '...', waitAfter: 'loader' }  // ElementConfig = objeto
+  },
+  ENDPOINT: {
+    'Produtos Home': { seletor: '/api.../', method: 'GET' }
   },
 */
 export type ElementConfig = string | ElementoOpcoes;

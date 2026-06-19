@@ -1,5 +1,4 @@
 import { Given, When, Then } from '@fixtures/fixtures';
-import { expect } from '@playwright/test';
 
 // ──────────────────────────────────────────────────────────────
 // Contexto / Setup
@@ -13,8 +12,12 @@ Given('que estou no documento {string}', async ({ pageContext }, documento: stri
 // Login
 // ──────────────────────────────────────────────────────────────
 
-Given('que efetuo o login {string} utilizando o usuário {string}', async ({ loginPage }, tipoLogin: string, usuario: string) => {
-  await loginPage.efetuarLogin(tipoLogin, usuario);
+Given('que acesso o sistema {string}', async ({ loginPage }, tipoAcesso: string) => {
+  await loginPage.acessoSistema(tipoAcesso);
+});
+
+When('que efetuo o login utilizando o usuário {string}', async ({ loginPage }, usuario: string) => {
+  await loginPage.efetuarLogin(usuario);
 });
 
 // ──────────────────────────────────────────────────────────────
@@ -41,7 +44,7 @@ When('preencho o campo {string} com {string}', async ({ pageContext }, nome: str
   await pageContext.activePage.preencherCampo(nome, valor);
 });
 
-When('seleciono no combobox {string} a opção {string}', async ({ pageContext }, nome: string, opcao: string) => {
+When('preencho o combobox {string} com {string}', async ({ pageContext }, nome: string, opcao: string) => {
   await pageContext.activePage.selecionarCombobox(nome, opcao);
 });
 
@@ -66,12 +69,25 @@ Then('não visualizo o {string} com a mensagem {string}', async ({ pageContext }
 });
 
 Then('o campo {string} deve conter o valor {string}', async ({ pageContext }, nome: string, valorEsperado: string) => {
-  const valor = await pageContext.activePage.obterValorCampo(nome);
-  expect(valor).toBe(valorEsperado);
+  await pageContext.activePage.validarValorCampo(nome, valorEsperado);
 });
 
 Then('valido se {string} está {string}', async ({ pageContext }, nome: string, estado: string) => {
   await pageContext.activePage.validarEstado(nome, estado);
+});
+
+Then('valido se checkbox {string} está {string}', async ({ pageContext }, nome: string, estado: string) => {
+  await pageContext.activePage.validarCheckboxEstado(nome, estado);
+});
+
+Then('valido que combobox {string} possui opções', async ({ pageContext }, nome: string, dataTable: any) => {
+  const opcoes: string[] = dataTable.raw().map((row: string[]) => row[0]);
+  await pageContext.activePage.validarOpcoesCombobox(nome, opcoes);
+});
+
+Then('valido os campos por label', async ({ pageContext }, dataTable: any) => {
+  const linhas = dataTable.hashes();
+  await pageContext.activePage.validarCamposPorLabel(linhas);
 });
 
 // ──────────────────────────────────────────────────────────────
