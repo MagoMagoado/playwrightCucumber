@@ -26,7 +26,7 @@ export const commonsElementos: MapaElementos = {
   },
 
   MENUS_NAVEGACAO: {
-    'Menu Principal': '[id="navbarSupportedContent"]',
+    'Menu Principal': '.navbar-nav .nav-link',
     'Submenu':        '.dropdown-menu a',
   },
 

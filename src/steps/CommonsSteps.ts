@@ -29,7 +29,7 @@ When('recarrego a página', async ({ pageContext }) => {
 });
 
 When('acesso o menu {string}', async ({ pageContext }, caminho: string) => {
-  await pageContext.activePage.acessarMenuNavegacao(caminho.split(' > '));
+  await pageContext.activePage.acessarMenuNavegacao(caminho);
 });
 
 // ──────────────────────────────────────────────────────────────
@@ -48,31 +48,21 @@ When('preencho o combobox {string} com {string}', async ({ pageContext }, nome: 
   await pageContext.activePage.selecionarCombobox(nome, opcao);
 });
 
-When('marco o checkbox {string}', async ({ pageContext }, nome: string) => {
-  await pageContext.activePage.marcarCheckbox(nome, true);
-});
-
-When('desmarco o checkbox {string}', async ({ pageContext }, nome: string) => {
-  await pageContext.activePage.marcarCheckbox(nome, false);
+When('{string} o checkbox {string}', async ({ pageContext }, acao: string, nome: string) => {
+  await pageContext.activePage.marcarCheckbox(acao, nome);
 });
 
 // ──────────────────────────────────────────────────────────────
 // Validações
 // ──────────────────────────────────────────────────────────────
 
-Then('visualizo o {string} com a mensagem {string}', async ({ pageContext }, tipo: string, mensagem: string) => {
-  await pageContext.activePage.validarMensagem(tipo, mensagem, true);
-});
-
-Then('não visualizo o {string} com a mensagem {string}', async ({ pageContext }, tipo: string, mensagem: string) => {
-  await pageContext.activePage.validarMensagem(tipo, mensagem, false);
-});
-
-Then('o campo {string} deve conter o valor {string}', async ({ pageContext }, nome: string, valorEsperado: string) => {
-  await pageContext.activePage.validarValorCampo(nome, valorEsperado);
+Then('{string} {string} com a mensagem {string}', async ({ pageContext }, estado: string, tipo: string, mensagem: string) => {
+  // estado: VISUALIZO ou NAO VISUALIZO
+  await pageContext.activePage.validarMensagem(estado, tipo, mensagem);
 });
 
 Then('valido se {string} está {string}', async ({ pageContext }, nome: string, estado: string) => {
+  // estado: MARCADO ou DESMARCADO
   await pageContext.activePage.validarEstado(nome, estado);
 });
 
@@ -81,13 +71,16 @@ Then('valido se checkbox {string} está {string}', async ({ pageContext }, nome:
 });
 
 Then('valido que combobox {string} possui opções', async ({ pageContext }, nome: string, dataTable: any) => {
-  const opcoes: string[] = dataTable.raw().map((row: string[]) => row[0]);
-  await pageContext.activePage.validarOpcoesCombobox(nome, opcoes);
+  await pageContext.activePage.validarOpcoesCombobox(nome, dataTable.hashes());
 });
 
 Then('valido os campos por label', async ({ pageContext }, dataTable: any) => {
   const linhas = dataTable.hashes();
   await pageContext.activePage.validarCamposPorLabel(linhas);
+});
+
+Then('o campo {string} deve conter o valor {string}', async ({ pageContext }, nome: string, valorEsperado: string) => {
+  await pageContext.activePage.validarValorCampo(nome, valorEsperado);
 });
 
 // ──────────────────────────────────────────────────────────────

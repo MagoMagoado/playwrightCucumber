@@ -9,6 +9,7 @@ export class CommonsPage {
 
   constructor(page: Page) {
     this.page = page;
+    this.page.setDefaultTimeout(60_000); // 1 min padrão para todas as ações, se precisar mais colocar específico em ação
     this.carregarElementos(commonsElementos);
   }
 
@@ -77,7 +78,8 @@ export class CommonsPage {
     const { index, texto, exact } = config;
     let locator = tipoContexto.locator(seletor);
     if (texto) {
-      locator = locator.filter({ hasText: exact ? new RegExp(`^${texto}$`) : texto });
+      // \s* tolera espaços/quebras de linha ao redor do texto, mas ainda pega o texto exato
+      locator = locator.filter({ hasText: exact ? new RegExp(`^\\s*${texto}\\s*$`) : texto });
     }
     if (index !== undefined) {
       locator = index < 0 ? locator.last() : locator.nth(index);
@@ -100,7 +102,7 @@ export class CommonsPage {
         await this.page.waitForLoadState('load').catch(() => {});
         await this.page.waitForLoadState('networkidle').catch(() => {});
         break;
-      case 'networkidle':
+      case 'networkidle': // aguarda até a rede ficar sem requisições ativas
         await this.page.waitForLoadState('networkidle');
         break;
     }
@@ -120,23 +122,26 @@ export class CommonsPage {
     await this.aguardarCarregamentoPagina();
   }
 
-  async acessarMenuNavegacao(caminho: string[]): Promise<void> {
+  // Navega pelo menu usando "Item > Submenu". Passa por subníveis intermediários com hover antes de clicar no último.
+  async acessarMenuNavegacao(caminho: string): Promise<void> {
+    const itens = caminho.split(' > ');
     await this.aguardarCarregamentoPagina('networkidle');
 
     const menuPrincipal = this.buscarElemento('MENUS_NAVEGACAO', 'Menu Principal');
-    await this.toLocator(menuPrincipal).filter({ hasText: new RegExp(`^${caminho[0]}`) }).first().click();
+    await this.toLocator(menuPrincipal).filter({ hasText: itens[0] }).first().click();
 
-    for (let i = 1; i < caminho.length; i++) {
+    if (itens.length > 1) {
       const submenu = this.buscarElemento('MENUS_NAVEGACAO', 'Submenu');
-      const locator = this.toLocator(submenu).getByText(caminho[i], { exact: true }).first();
-      const isUltimo = i === caminho.length - 1;
-      if (isUltimo) {
-        await locator.click();
-        await this.aguardarCarregamentoPagina('navigation');
-      } else {
-        await locator.hover();
+      for (let i = 1; i < itens.length; i++) {
+        const locator = this.toLocator(submenu).getByText(itens[i], { exact: true }).first();
+        if (i < itens.length - 1) {
+          await locator.hover();
+        } else {
+          await locator.click();
+        }
       }
     }
+    await this.aguardarCarregamentoPagina('navigation');
   }
 
   // ──────────────────────────────────────────────────────────────
@@ -146,8 +151,8 @@ export class CommonsPage {
   async clicarBotao(nome: string): Promise<void> {
     const config = this.buscarElemento('BOTAO', nome);
     const locator = this.toLocator(config);
-    // await locator.waitFor({ state: 'visible' });
-    await locator.click({ timeout: 10000 });
+    await expect(locator, `Botão "${nome}" não encontrado na página`).toBeVisible();
+    await locator.click();
 
     if (typeof config === 'object' && config.waitAfter) {
       await this.aguardarCarregamentoPagina(config.waitAfter);
@@ -157,6 +162,7 @@ export class CommonsPage {
   async preencherCampo(nome: string, valor: string): Promise<void> {
     const config = this.buscarElemento('CAMPO', nome);
     const locator = this.toLocator(config);
+    await expect(locator, `Campo "${nome}" não encontrado na página`).toBeVisible();
     await locator.clear();
     await locator.fill(valor);
   }
@@ -164,14 +170,15 @@ export class CommonsPage {
   async selecionarCombobox(nome: string, opcao: string): Promise<void> {
     const config = this.buscarElemento('COMBOBOX', nome);
     const locator = this.toLocator(config);
-    await locator.waitFor({ state: 'visible' });
+    await expect(locator, `Combobox "${nome}" não encontrado na página`).toBeVisible();
     await locator.selectOption({ label: opcao });
   }
 
-  async marcarCheckbox(nome: string, marcar: boolean): Promise<void> {
+  async marcarCheckbox(marcar: string, nome: string): Promise<void> {
     const config = this.buscarElemento('CHECKBOX', nome);
-    const locator = this.toLocator(config);
-    if (marcar) {
+    const locator = this.toLocator(config).locator('input[type="checkbox"]');
+    await expect(locator, `Checkbox "${nome}" não encontrado na página`).toBeVisible();
+    if (marcar === 'MARCO') {
       await locator.check();
     } else {
       await locator.uncheck();
@@ -182,24 +189,20 @@ export class CommonsPage {
   // Validações
   // ──────────────────────────────────────────────────────────────
 
-  async validarMensagem(tipo: string, mensagem: string, visivel = true): Promise<void> {
-    const config = this.buscarElemento('VALIDACAO', tipo);
+  async validarMensagem(estado: string, tipo: string, mensagem: string): Promise<void> {
+    const config = this.buscarElementoEmQualquerCategoria(tipo);
     const elemento = this.toLocator(config).filter({ hasText: mensagem });
-    if (visivel) {
-      await elemento.waitFor({ state: 'visible' });
+    if (estado === 'VISUALIZO') {
+      await expect(elemento, `"${tipo}" com a mensagem "${mensagem}" não está visível`).toBeVisible();
     } else {
-      await elemento.waitFor({ state: 'hidden' });
+      await expect(elemento, `"${tipo}" com a mensagem "${mensagem}" ainda está visível`).toBeHidden();
     }
   }
 
-  async obterValorCampo(nome: string): Promise<string> {
-    const config = this.buscarElemento('CAMPO', nome);
-    return await this.toLocator(config).inputValue();
-  }
-
   async validarValorCampo(nome: string, valorEsperado: string): Promise<void> {
-    const valor = await this.obterValorCampo(nome);
-    expect(valor).toBe(valorEsperado);
+    const locator = this.toLocator(this.buscarElemento('CAMPO', nome));
+    await locator.scrollIntoViewIfNeeded();
+    expect(await locator.textContent()).toBe(valorEsperado);
   }
 
   async validarEstado(nome: string, estado: string): Promise<void> {
@@ -214,7 +217,7 @@ export class CommonsPage {
 
   async validarCheckboxEstado(nome: string, estado: string): Promise<void> {
     const config = this.buscarElemento('CHECKBOX', nome);
-    const locator = this.toLocator(config);
+    const locator = this.toLocator(config).locator('input[type="checkbox"]');
     if (estado === 'MARCADO') {
       await expect(locator).toBeChecked();
     } else {
@@ -222,20 +225,20 @@ export class CommonsPage {
     }
   }
 
-  async validarOpcoesCombobox(nome: string, opcoesEsperadas: string[]): Promise<void> {
-    const locator = this.toLocator(this.buscarElemento('COMBOBOX', nome));
-    const opcoes = locator.locator('option');
+  async validarOpcoesCombobox(nome: string, linhas: { OPCAO: string }[]): Promise<void> {
+    const opcoes = this.toLocator(this.buscarElemento('COMBOBOX', nome)).locator('option');
 
-    for (const opcaoEsperada of opcoesEsperadas) {
-      await expect(opcoes.filter({ hasText: opcaoEsperada.trim() })).toBeAttached();
+    for (const { OPCAO } of linhas) {
+      await expect(opcoes.filter({ hasText: OPCAO.trim() })).toBeAttached();
     }
   }
 
   // elementos que repetem o mesmo seletor com textos distintos (ex: lista de produtos).
-  async validarCamposPorLabel(linhas: { Nome: string; TIPO: string; VALOR: string }[]): Promise<void> {
-    for (const { Nome, TIPO, VALOR } of linhas) {
-      const config = this.buscarElemento(TIPO.toUpperCase(), Nome);
-      const locator = this.toLocator(config).filter({ hasText: new RegExp(`^${VALOR.trim()}$`) });
+  async validarCamposPorLabel(linhas: { NOME: string; TIPO: string; VALOR: string }[]): Promise<void> {
+    for (const { NOME, TIPO, VALOR } of linhas) {
+      const config = this.buscarElemento(TIPO.toUpperCase(), NOME);
+      const locator = this.toLocator(config).getByText(VALOR.trim(), { exact: true });
+      await locator.scrollIntoViewIfNeeded();
       await expect(locator).toBeVisible();
     }
   }

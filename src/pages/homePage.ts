@@ -5,21 +5,9 @@ import { homeElementos } from '@elements/homeElements';
 export class HomePage extends CommonsPage {
   constructor(page: Page) {
     super(page);
-    this.carregarElementosEmIframe(homeElementos);
-  }
-
-  override async selecionarCombobox(nome: string, opcao: string): Promise<void> {
-    const config = this.buscarElemento('COMBOBOX', nome);
-    const container = this.toLocator(config);
-
-    // abre o dropdown e filtra digitando no input interno do componente Angular
-    const input = container.locator('input[role="combobox"]');
-    await input.click({ timeout: 10000 });
-    await input.fill(opcao);
-
-    // clica na opção pelo texto exato dentro da lista
-    const opcaoLocator = container.locator('.bento-list-row').getByText(opcao, { exact: true });
-    await opcaoLocator.click();
+    this.carregarElementos(homeElementos);
+    // se elementos estivem em tela com Iframe
+      // this.carregarElementosEmIframe(homeElementos);
   }
 
   override async validarEstado(nome: string, estado: string): Promise<void> {
