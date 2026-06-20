@@ -60,6 +60,7 @@ Funcionalidade: Validações de teste
     E que estou no documento "HOME"
     Quando "MARCO" o checkbox "Filtro: Hand Saw"
     Então valido se checkbox "Filtro: Hand Saw" está "MARCADO"
+    E valido que "Produto Wood Saw" co2 tem categoria "B"
     Então valido os campos por label
       | NOME         | TIPO  | VALOR  |
       | Produto Nome | CAMPO | Hammer |

@@ -12,6 +12,7 @@ export const homeElementos: MapaElementos = {
     'Filtro: By category' : { seletor: '#filters h4', texto: 'By category:', exact: true },
     'Filtro: Search' : '[data-test="search-query"]',
     'Produto Nome' : { seletor: '[data-test="product-name"]'},
+    'Produto Wood Saw': { seletor: '.card-body', texto: 'Wood Saw' },
   },
 
   COMBOBOX: {
@@ -24,6 +25,6 @@ export const homeElementos: MapaElementos = {
   },
 
   VALIDACAO: {
-    'Quantidade Produtos': { seletor: '[data-test="search-result-count"]', exact: true }
+    'Quantidade Produtos': { seletor: '[data-test="search-result-count"]', exact: true },
   },
 };

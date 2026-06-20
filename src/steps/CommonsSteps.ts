@@ -62,11 +62,12 @@ Then('{string} {string} com a mensagem {string}', async ({ pageContext }, estado
 });
 
 Then('valido se {string} está {string}', async ({ pageContext }, nome: string, estado: string) => {
-  // estado: MARCADO ou DESMARCADO
+  // estado: HABILITADO ou DESABILITADO
   await pageContext.activePage.validarEstado(nome, estado);
 });
 
 Then('valido se checkbox {string} está {string}', async ({ pageContext }, nome: string, estado: string) => {
+  // estado: MARCADO ou DESMARCADO
   await pageContext.activePage.validarCheckboxEstado(nome, estado);
 });
 
@@ -81,6 +82,11 @@ Then('valido os campos por label', async ({ pageContext }, dataTable: any) => {
 
 Then('o campo {string} deve conter o valor {string}', async ({ pageContext }, nome: string, valorEsperado: string) => {
   await pageContext.activePage.validarValorCampo(nome, valorEsperado);
+});
+
+// STEP ESPECÍFICO PARA HomePage. Teste para verificar se acessa corretamente método
+Then('valido que {string} co2 tem categoria {string}', async ({ pageContext }, nome: string, categoria: string) => {
+  await pageContext.activePage.validarCategoriaProduto(nome, categoria);
 });
 
 // ──────────────────────────────────────────────────────────────

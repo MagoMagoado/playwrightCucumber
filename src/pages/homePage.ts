@@ -10,18 +10,15 @@ export class HomePage extends CommonsPage {
       // this.carregarElementosEmIframe(homeElementos);
   }
 
-  override async validarEstado(nome: string, estado: string): Promise<void> {
-    if (nome === 'Último editar grid') {
-      // esse elemento indica disabled via ícone filho .disabled-icon, não pelo atributo disabled
-      const elemento = this.toLocator(this.buscarElementoEmQualquerCategoria(nome));
-      await elemento.scrollIntoViewIfNeeded();
-      if (estado === 'DESABILITADO') {
-        await expect(elemento).toHaveClass(/disabled-icon/);
-      } else {
-        await expect(elemento).not.toHaveClass(/disabled-icon/);
-      }
+  override async validarCategoriaProduto(nome: string, categoria: string): Promise<void> {
+    if (categoria === 'B') {
+      const config = this.buscarElemento('CAMPO', nome);
+      const locator = this.toLocator(config).locator('.co2-letter.active');
+      await expect(locator).toHaveClass(/rating-b/);
+
+      console.log("Produto eco-friendly")
       return;
     }
-    await super.validarEstado(nome, estado);
+    await super.validarCategoriaProduto(nome, categoria);
   }
 }

@@ -208,10 +208,10 @@ export class CommonsPage {
   async validarEstado(nome: string, estado: string): Promise<void> {
     const config = this.buscarElementoEmQualquerCategoria(nome);
     const locator = this.toLocator(config);
-    if (estado === 'DESABILITADO') {
-      await expect(locator).toBeDisabled();
-    } else {
+    if (estado === 'HABILITADO') {
       await expect(locator).toBeEnabled();
+    } else {
+      await expect(locator).toBeDisabled();
     }
   }
 
@@ -241,6 +241,13 @@ export class CommonsPage {
       await locator.scrollIntoViewIfNeeded();
       await expect(locator).toBeVisible();
     }
+  }
+
+  // MÉTODO ESPECÍFICO PARA HomePage COM OVERRIDE
+  async validarCategoriaProduto(nome: string, categoria: string): Promise<void> {
+    const config = this.buscarElemento('CAMPO', nome);
+    const locator = this.toLocator(config).locator('.co2-letter.active');
+    expect(await locator.textContent()).toBe(categoria);
   }
 
   // ──────────────────────────────────────────────────────────────
