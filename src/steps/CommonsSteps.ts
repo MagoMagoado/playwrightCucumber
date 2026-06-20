@@ -40,6 +40,10 @@ When('clico no botão {string}', async ({ pageContext }, nome: string) => {
   await pageContext.activePage.clicarBotao(nome);
 });
 
+When('preencho os campos', async ({ pageContext }, dataTable: any) => {
+  await pageContext.activePage.preencherCampos(dataTable.hashes());
+});
+
 When('preencho o campo {string} com {string}', async ({ pageContext }, nome: string, valor: string) => {
   await pageContext.activePage.preencherCampo(nome, valor);
 });

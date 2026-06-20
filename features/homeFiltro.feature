@@ -8,11 +8,27 @@ Funcionalidade: Validações de teste
     Então "VISUALIZO" "TÍTULO" com a mensagem "My account"
     # E valido que endpoint "Dados Usuário" foi chamado
 
-  Cenário: Validações Filtro Home
+  Cenário: Validações Contact
+  Dado acesso o menu "Contact"
+  Quando preencho os campos
+    | NOME                | TIPO     | VALOR            |
+    | Contact: First name | CAMPO    | Jano Doe         |
+    | Contact: Last name  | CAMPO    | Jano Doe         |
+    | Contact: Email      | CAMPO    | j@hotmail.com    |
+    | Contact: Subject    | COMBOBOX | Customer service |
+  E preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing"
+  E clico no botão "Contact: Send"
+  Então "VISUALIZO" "ALERT" com a mensagem "Message must be minimal 50 characters"
+  Quando preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing."
+  E clico no botão "Contact: Send"
+  Então "VISUALIZO" "ALERT" com a mensagem "Thanks for your message! We will contact you shortly."
+  
+  Cenário: Validações Filtro Home Sucesso
     Dado acesso o menu "Home"
     # E valido que endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
     Quando preencho o combobox "Filtro: Sort" com "Name (A - Z)"
+    E o combobox "Filtro: Sort" deve conter o valor "Name (A - Z)"
     E valido que combobox "Filtro: Sort" possui opções
       | OPCAO              |
       | Name (A - Z)       |
@@ -54,7 +70,7 @@ Funcionalidade: Validações de teste
       | Produto Nome | CAMPO | Claw Hammer with Fiberglass Handle    |
       | Produto Nome | CAMPO | Court Hammer                          |
 
-  Cenário: Validações Filtro Falha
+  Cenário: Validações Filtro Home Falha
     Dado acesso o menu "Home"
     # E valido que endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"

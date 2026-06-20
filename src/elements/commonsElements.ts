@@ -3,17 +3,23 @@ import { type MapaElementos } from './elementRegistry';
 export const commonsElementos: MapaElementos = {
 
   BOTAO: {
-    'Sign in': { seletor: '[data-test="nav-sign-in"]', texto: 'Sign in', exact: true },
-    'Login': { seletor: '[data-test="login-submit"]', texto: 'Login', exact: true },
+    'Sign in':        { seletor: '[data-test="nav-sign-in"]', texto: 'Sign in', exact: true },
+    'Login':          { seletor: '[data-test="login-submit"]', texto: 'Login', exact: true },
+    'Contact: Send':  '[data-test="contact-submit"]',
   },
 
   CAMPO: {
-    'Email': '#email',
-    'Password': '#password',
+    'Email':                '#email',
+    'Password':             '#password',
+    'Contact: First name':  '[data-test="first-name"]',
+    'Contact: Last name':   '[data-test="last-name"]',
+    'Contact: Email':       '[data-test="email"]',
+    'Contact: Message':     '[data-test="message"]',
   },
 
   COMBOBOX: {
-    'Idioma': '#language-select',
+    'Idioma':           '#language-select',
+    'Contact: Subject': '[data-test="subject"]',
   },
 
   CHECKBOX: {},

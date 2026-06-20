@@ -159,6 +159,19 @@ export class CommonsPage {
     }
   }
 
+  async preencherCampos(linhas: { NOME: string; TIPO: string; VALOR: string }[]): Promise<void> {
+    for (const { NOME, TIPO, VALOR } of linhas) {
+      switch (TIPO) {
+        case 'CAMPO':
+          await this.preencherCampo(NOME, VALOR);
+          break;
+        case 'COMBOBOX':
+          await this.selecionarCombobox(NOME, VALOR);
+          break;
+      }
+    }
+  }
+
   async preencherCampo(nome: string, valor: string): Promise<void> {
     const config = this.buscarElemento('CAMPO', nome);
     const locator = this.toLocator(config);
