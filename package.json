@@ -2,21 +2,14 @@
   "name": "automation-pw",
   "version": "1.0.0",
   "description": "Automated tests - Playwright",
-  "main": "index.js",
   "scripts": {
     "test": "npx bddgen && npx playwright test",
-    "test:local": "npx bddgen && npx playwright test",
     "test:headed": "npx bddgen && npx playwright test --headed",
     "test:debug": "npx bddgen && npx playwright test --debug",
     "test:ui": "npx bddgen && npx playwright test --ui",
     "report": "npx playwright show-report",
     "clean": "rimraf test-results playwright-report .features-gen",
-    "pretest": "npm run clean",
-    "type-check": "npx tsc --noEmit",
-    "lint": "npm run type-check",
-    "audit-check": "npm audit --audit-level moderate",
-    "setup": "npm install && npx playwright install && npm run type-check",
-    "dev": "npm run clean && npm run test:headed"
+    "pretest": "npm run clean"
   },
   "keywords": [
     "playwright",
@@ -26,14 +19,9 @@
     "automation",
     "testing"
   ],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.56.1",
-    "@reportportal/agent-js-playwright": "^5.3.2",
     "@types/node": "^20.19.24",
-    "@types/oracledb": "^6.5.1",
-    "cross-env": "^10.1.0",
     "playwright-bdd": "^8.4.1",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
