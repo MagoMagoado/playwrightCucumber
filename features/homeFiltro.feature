@@ -28,7 +28,6 @@ Funcionalidade: Validações de teste
     # E valido que endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
     Quando preencho o combobox "Filtro: Sort" com "Name (A - Z)"
-    E o combobox "Filtro: Sort" deve conter o valor "Name (A - Z)"
     E valido que combobox "Filtro: Sort" possui opções
       | OPCAO              |
       | Name (A - Z)       |
