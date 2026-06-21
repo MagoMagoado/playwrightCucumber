@@ -7,23 +7,8 @@ Funcionalidade: Validações de teste
     E que efetuo o login utilizando o usuário "Jano Doe"
     Então "VISUALIZO" "TÍTULO" com a mensagem "My account"
     # E valido que endpoint "Dados Usuário" foi chamado
-
-  Cenário: Validações Contact
-  Dado acesso o menu "Contact"
-  Quando preencho os campos
-    | NOME                | TIPO     | VALOR            |
-    | Contact: First name | CAMPO    | Jano Doe         |
-    | Contact: Last name  | CAMPO    | Jano Doe         |
-    | Contact: Email      | CAMPO    | j@hotmail.com    |
-    | Contact: Subject    | COMBOBOX | Customer service |
-  E preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing"
-  E clico no botão "Contact: Send"
-  Então "VISUALIZO" "ALERT" com a mensagem "Message must be minimal 50 characters"
-  Quando preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing."
-  E clico no botão "Contact: Send"
-  Então "VISUALIZO" "ALERT" com a mensagem "Thanks for your message! We will contact you shortly."
   
-  Cenário: Validações Filtro Home Sucesso
+  Cenário: Validações Filtro Home Geral
     Dado acesso o menu "Home"
     # E valido que endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
@@ -69,14 +54,31 @@ Funcionalidade: Validações de teste
       | Produto Nome | CAMPO | Claw Hammer with Fiberglass Handle    |
       | Produto Nome | CAMPO | Court Hammer                          |
 
-  Cenário: Validações Filtro Home Falha
+  Cenário: Validações Filtro Home Específicos
     Dado acesso o menu "Home"
     # E valido que endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
     Quando "MARCO" o checkbox "Filtro: Hand Saw"
     Então valido se checkbox "Filtro: Hand Saw" está "MARCADO"
     E valido que "Produto Wood Saw" co2 tem categoria "B"
+    E clico no botão "Limpar Filtro"
+    Quando que deslizo o slider "Filtro: Preço" para mínimo "2" e máximo "4"
     Então valido os campos por label
-      | NOME         | TIPO  | VALOR  |
-      | Produto Nome | CAMPO | Hammer |
+      | NOME         | TIPO  | VALOR                 |
+      | Produto Nome | CAMPO | Washers               |
+      | Produto Nome | CAMPO | Flat-Head Wood Screws |
 
+  Cenário: Validações Aba Contact
+    Dado acesso o menu "Contact"
+    Quando preencho os campos
+      | NOME                | TIPO     | VALOR            |
+      | Contact: First name | CAMPO    | Jano Doe         |
+      | Contact: Last name  | CAMPO    | Jano Doe         |
+      | Contact: Email      | CAMPO    | j@hotmail.com    |
+      | Contact: Subject    | COMBOBOX | Customer service |
+    E preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing"
+    E clico no botão "Contact: Send"
+    Então "VISUALIZO" "ALERT" com a mensagem "Message must be minimal 50 characters"
+    Quando preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing."
+    E clico no botão "Contact: Send"
+    Então "VISUALIZO" "ALERT" com a mensagem "Thanks for your message! We will contact you shortly."

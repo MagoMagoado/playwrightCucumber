@@ -1,45 +1,51 @@
 import { test as base, createBdd } from 'playwright-bdd';
 import { type Page } from '@playwright/test';
-import { CommonsPage } from '@pages/CommonsPage';
-import { LoginPage } from '@pages/LoginPage';
+import { CommonsPage } from '@pages/commonsPage';
+import { LoginPage } from '@pages/loginPage';
 import { HomePage } from '@pages/homePage';
 
 /**
- * Gerencia qual page está ativa durante o teste.
- * O step "que estou no documento" chama ativarDocumento() para trocar a page ativa.
- * Todos os steps de ação delegam para activePage, que executa o comportamento
- * correto de acordo com a page registrada para aquele documento.
- * Para adicionar uma nova tela: instanciar a page no constructor e registrá-la no mapa.
+ * Controla qual page está ativa no cenário. O step "que estou no documento" chama ativarDocumento(),
+ * que instancia a page correspondente e a atribui a activePage — a partir daí todos os steps delegam para ela.
+ *
+ * Para adicionar uma nova tela: registrá-la no mapa pages e, se tiver steps próprios,
+ * expô-la também como fixture em type Fixtures e em base.extend usando getPagina().
  */
 export class PageContext {
   activePage: CommonsPage;
-  private readonly paginas: Map<string, CommonsPage>;
+  private readonly pages: Map<string, () => CommonsPage>;
 
   constructor(page: Page) {
     this.activePage = new CommonsPage(page);
-    this.paginas = new Map<string, CommonsPage>([
-      ['HOME', new HomePage(page)],
+    this.pages = new Map<string, () => CommonsPage>([
+      ['HOME', () => new HomePage(page)],
     ]);
   }
 
   ativarDocumento(documento: string): void {
-    const pagina = this.paginas.get(documento);
-    if (!pagina) throw new Error(`Documento "${documento}" não registrado em PageContext`);
-    this.activePage = pagina;
+    const pageChamada = this.pages.get(documento);
+    if (!pageChamada) throw new Error(`Documento "${documento}" não registrado em PageContext`);
+    this.activePage = pageChamada();
   }
 }
 
 type Fixtures = {
-  loginPage: LoginPage;
   pageContext: PageContext;
+  loginPage: LoginPage;
+  homePage: HomePage;
 };
 
 export const test = base.extend<Fixtures>({
-  loginPage: async ({ page }, use) => use(new LoginPage(page)),
-
   pageContext: async ({ page }, use) => {
     await use(new PageContext(page));
   },
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
+  },
+  homePage: async ({ pageContext }, use) => {
+    pageContext.ativarDocumento('HOME');
+    await use(pageContext.activePage as HomePage);
+  }
 });
 
 export const { Given, When, Then } = createBdd(test);

@@ -4,7 +4,7 @@ export const homeElementos: MapaElementos = {
 
   BOTAO: {
     'Search': '[data-test="search-submit"]',
-    'Último editar grid': '[aria-rowindex="10"] .bento-icon-edit',
+    'Limpar Filtro': '.btn-warning',
   },
 
   CAMPO: {
@@ -26,5 +26,9 @@ export const homeElementos: MapaElementos = {
 
   VALIDACAO: {
     'Quantidade Produtos': { seletor: '[data-test="search-result-count"]', exact: true },
+  },
+
+  SLIDER: {
+    'Filtro: Preço': 'ngx-slider.ngx-slider',
   },
 };

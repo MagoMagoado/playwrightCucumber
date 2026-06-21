@@ -18,7 +18,6 @@ export const commonsElementos: MapaElementos = {
   },
 
   COMBOBOX: {
-    'Idioma':           '#language-select',
     'Contact: Subject': '[data-test="subject"]',
   },
 
