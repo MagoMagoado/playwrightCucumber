@@ -22,7 +22,7 @@ export default defineConfig({
     headless: !!process.env.CI,
     channel: process.env.CI ? undefined : 'chrome',
     viewport: null,
-    screenshot: 'off',
+    screenshot: 'only-on-failure',
     video: 'off',
     trace: 'off',
     launchOptions: {
