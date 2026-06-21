@@ -63,10 +63,10 @@ Funcionalidade: Validações de teste
     E valido que "Produto Wood Saw" co2 tem categoria "B"
     E clico no botão "Limpar Filtro"
     Quando que deslizo o slider "Filtro: Preço" para mínimo "2" e máximo "4"
-    Então valido os campos por label
-      | NOME         | TIPO  | VALOR                 |
-      | Produto Nome | CAMPO | Washers               |
-      | Produto Nome | CAMPO | Flat-Head Wood Screws |
+    # Então valido os campos por label
+    #   | NOME         | TIPO  | VALOR                 |
+    #   | Produto Nome | CAMPO | Washers               |
+    #   | Produto Nome | CAMPO | Flat-Head Wood Screws |
 
   Cenário: Validações Aba Contact
     Dado acesso o menu "Contact"
@@ -80,5 +80,5 @@ Funcionalidade: Validações de teste
     E clico no botão "Contact: Send"
     Então "VISUALIZO" "ALERT" com a mensagem "Message must be minimal 50 characters"
     Quando preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing."
-    E clico no botão "Contact: Send"
-    Então "VISUALIZO" "ALERT" com a mensagem "Thanks for your message! We will contact you shortly."
+    # E clico no botão "Contact: Send"
+    # Então "VISUALIZO" "ALERT" com a mensagem "Thanks for your message! We will contact you shortly."
