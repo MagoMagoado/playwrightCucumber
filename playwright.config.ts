@@ -26,7 +26,10 @@ export default defineConfig({
     video: 'off',
     trace: 'off',
     launchOptions: {
-      args: ['--start-maximized'],
+      args: [
+        '--start-maximized',
+        '--disable-blink-features=AutomationControlled',
+      ],
     },
   },
 });
