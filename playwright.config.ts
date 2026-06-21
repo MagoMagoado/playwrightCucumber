@@ -1,5 +1,9 @@
 import { defineConfig } from '@playwright/test';
 import { defineBddConfig } from 'playwright-bdd';
+import { register } from 'tsconfig-paths';
+import { compilerOptions } from './tsconfig.json';
+
+register({ baseUrl: '.', paths: compilerOptions.paths });
 
 const testDir = defineBddConfig({
   features: 'features/**/*.feature',
