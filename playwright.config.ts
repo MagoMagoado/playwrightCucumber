@@ -28,7 +28,6 @@ export default defineConfig({
     launchOptions: {
       args: [
         '--start-maximized',
-        '--disable-blink-features=AutomationControlled',
       ],
     },
   },
