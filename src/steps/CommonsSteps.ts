@@ -101,6 +101,21 @@ Then('valido que endpoint foi chamado', async ({ request }) => {
   const response = await request.get('https://api.practicesoftwaretesting.com/users/me')
   const responseObject = await await response.json()
   console.log(responseObject)
+  // ABA CALL
+  // Time
+  // start:
+  // 6.1s
+  // duration:
+  // 710ms
+  // Parameters
+  // url:
+  // "https://api.practicesoftwaretesting.com/users/me"
+  // method:
+  // "GET"
+  // timeout:
+  // 0
+  // Return value
+  // {"url":"https://api.practicesoftwaretesting.com/users/me","status":401,"statusText":"Unauthorized","headers":[{"name":"Date","value":"Tue, 23 Jun 2026 15:25:57 GMT"},{"name":"Server","value":"Apache/2.4.52 (Ubuntu)"},{"name":"Cache-Control","value":"no-cache, private"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Expose-Headers","value":"Content-Disposition"},{"name":"Upgrade","value":"h2"},{"name":"Connection","value":"Upgrade, close"},{"name":"Transfer-Encoding","value":"chunked"},{"name":"Content-Type","value":"application/json"}],"fetchUid":"1b97e97c33c89260d91fce4b6d206192"}
 });
 
 // ──────────────────────────────────────────────────────────────
