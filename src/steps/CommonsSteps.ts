@@ -94,6 +94,16 @@ Then('valido que {string} co2 tem categoria {string}', async ({ pageContext }, n
 });
 
 // ──────────────────────────────────────────────────────────────
+// API Tests
+// ──────────────────────────────────────────────────────────────
+
+Then('valido que endpoint foi chamado', async ({ request }) => {
+  const response = await request.get('https://api.practicesoftwaretesting.com/users/me')
+  const responseObject = await await response.json()
+  console.log(responseObject)
+});
+
+// ──────────────────────────────────────────────────────────────
 // Utilitários
 // ──────────────────────────────────────────────────────────────
 
