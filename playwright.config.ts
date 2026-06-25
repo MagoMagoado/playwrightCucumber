@@ -25,6 +25,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'off',
     trace: 'off',
+    ignoreHTTPSErrors: true, // Ignore SSL certificate errors (browser and request context)
     launchOptions: {
       args: [
         '--start-maximized',

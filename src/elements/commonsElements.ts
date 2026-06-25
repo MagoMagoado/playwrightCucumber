@@ -37,7 +37,7 @@ export const commonsElementos: MapaElementos = {
 
   ENDPOINT: {
     'Dados Usuário': { seletor: 'api.practicesoftwaretesting.com/users/me', methodURL: 'GET' },
-    'Produtos Home': { seletor: '/api.practicesoftwaretesting.com/products', methodURL: 'GET' },
+    'Produtos Home': { seletor: 'api.practicesoftwaretesting.com/products?page=0&sort=name,asc&between=price,1,100&is_rental=false', methodURL: 'GET' },
   }
 
 };

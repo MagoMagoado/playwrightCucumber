@@ -264,6 +264,70 @@ export class CommonsPage {
   }
 
   // ──────────────────────────────────────────────────────────────
+  // Endpoints
+  // ──────────────────────────────────────────────────────────────
+
+  private async obterTokenAuth(): Promise<string | null> {
+    return this.page.evaluate(() => localStorage.getItem('auth-token'));
+  }
+
+  private urlCompleta(seletor: string): string {
+    if (seletor.startsWith('http')) return seletor;
+    return `https://${seletor.replace(/^\//, '')}`;
+  }
+
+  private async chamarEndpoint(nome: string): Promise<any> {
+    const config = this.buscarElemento('ENDPOINT', nome);
+    if (typeof config === 'string') throw new Error(`Endpoint "${nome}" deve ser um objeto com seletor`);
+    const url = this.urlCompleta(config.seletor);
+    const token = await this.obterTokenAuth();
+    const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const response = await this.page.request.get(url, { headers });
+    expect(response.ok(), `Endpoint "${nome}" retornou status ${response.status()}`).toBeTruthy();
+    return response.json();
+  }
+
+  async validarEndpointChamado(nome: string): Promise<void> {
+    await this.chamarEndpoint(nome);
+  }
+
+  async validarEndpointContemValores(nome: string, chave: string, valores: string[]): Promise<void> {
+    // 1. Chama o endpoint e obtém o body
+    const body = await this.chamarEndpoint(nome);
+
+    // 2. Navega o caminho da chave no JSON
+    // suporta: "first_name", "address > city", "data[] > product_image > file_name"
+    // "[]" indica array: coleta o campo seguinte de cada item da lista
+    const segmentos = chave.split(' > ').map((s: string) => s.trim());
+    const navegarCaminho = (obj: any, caminho: string[]): any => {
+      if (caminho.length === 0 || obj === undefined) return obj;
+      const [atual, ...restante] = caminho;
+      if (atual.endsWith('[]')) {
+        const chaveArray = atual.slice(0, -2);
+        const array = obj?.[chaveArray];
+        if (!Array.isArray(array)) throw new Error(`"${chaveArray}" não é um array na resposta de "${nome}"`);
+        return array.map((item: any) => navegarCaminho(item, restante));
+      }
+      return navegarCaminho(obj?.[atual], restante);
+    };
+    const dadosEncontrados = navegarCaminho(body, segmentos);
+    if (dadosEncontrados === undefined) throw new Error(`Chave "${chave}" não encontrada na resposta de "${nome}"`);
+
+    // 3. Compara os valores encontrados com os esperados
+    const listaEncontrados: string[] = Array.isArray(dadosEncontrados)
+      ? dadosEncontrados.map(String)
+      : [String(dadosEncontrados)];
+    const naoEncontrados = valores.filter(v => !listaEncontrados.includes(v));
+    if (naoEncontrados.length > 0) {
+      throw new Error(
+        `Valores não encontrados em "${chave}" de "${nome}":\n` +
+        `  Esperados : ${naoEncontrados.join(', ')}\n` +
+        `  Encontrados: ${listaEncontrados.join(', ')}`
+      );
+    }
+  }
+
+  // ──────────────────────────────────────────────────────────────
   // Utilitários
   // ──────────────────────────────────────────────────────────────
 
