@@ -65,6 +65,11 @@ Then('{string} {string} com a mensagem {string}', async ({ pageContext }, estado
   await pageContext.activePage.validarMensagem(estado, tipo, mensagem);
 });
 
+Then('valido se {string} {string} dentro de {string}', async ({ pageContext }, estado: string, nome: string, container: string) => {
+  // estado: VISUALIZO ou NAO VISUALIZO / container: nome do elemento pai ou "TELA" para buscar em tudo
+  await pageContext.activePage.validarVisibilidade(estado, nome, container);
+});
+
 Then('valido se {string} está {string}', async ({ pageContext }, nome: string, estado: string) => {
   // estado: HABILITADO ou DESABILITADO
   await pageContext.activePage.validarEstado(nome, estado);

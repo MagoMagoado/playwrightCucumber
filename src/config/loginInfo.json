@@ -10,5 +10,9 @@
   "Jack Howe": {
     "username": "customer2@practicesoftwaretesting.com",
     "password": "welcome01"
+  },
+  "User Sauce": {
+    "username": "standard_user",
+    "password": "secret_sauce"
   }
 }

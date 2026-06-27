@@ -31,8 +31,10 @@ export const commonsElementos: MapaElementos = {
   },
 
   MENUS_NAVEGACAO: {
+    'Menu': '.navbar-nav',
     'Menu Principal': '.navbar-nav .nav-link',
     'Submenu':        '.dropdown-menu a',
+    'Menu Principal: Jane Doe': { seletor: '.navbar-nav .nav-link', texto: 'Jane Doe', exact: true },
   },
 
   ENDPOINT: {

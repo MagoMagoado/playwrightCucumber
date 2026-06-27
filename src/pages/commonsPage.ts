@@ -212,6 +212,25 @@ export class CommonsPage {
     }
   }
 
+  async validarVisibilidade(estado: string, nome: string, container: string): Promise<void> {
+    const config = this.buscarElementoEmQualquerCategoria(nome);
+    let locator: Locator;
+
+    if (!container || container === 'TELA') {
+      locator = this.toLocator(config);
+    } else {
+      const containerConfig = this.buscarElementoEmQualquerCategoria(container);
+      const seletor = typeof config === 'string' ? config : config.seletor;
+      locator = this.toLocator(containerConfig).locator(seletor);
+    }
+
+    if (estado === 'VISUALIZO') {
+      await expect(locator, `"${nome}" deveria estar visível`).toBeVisible();
+    } else {
+      await expect(locator, `"${nome}" ainda está visível`).toBeHidden();
+    }
+  }
+
   async validarValorCampo(nome: string, valorEsperado: string): Promise<void> {
     const locator = this.toLocator(this.buscarElemento('CAMPO', nome));
     await locator.scrollIntoViewIfNeeded();

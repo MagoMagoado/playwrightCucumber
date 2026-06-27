@@ -79,8 +79,10 @@ Funcionalidade: Validações de teste
       | Produto Nome | CAMPO | Flat-Head Wood Screws |
 
   Cenário: Validações Aba Contact
-    Dado acesso o menu "Contact"
-    Quando preencho os campos
+    Dado acesso o menu "Jane Doe > Sign out"
+    Então valido se "NAO VISUALIZO" "Menu Principal: Jane Doe" dentro de "Menu"
+    Quando acesso o menu "Contact"
+    E preencho os campos
       | NOME                | TIPO     | VALOR            |
       | Contact: First name | CAMPO    | Jane Doe         |
       | Contact: Last name  | CAMPO    | Doe              |
