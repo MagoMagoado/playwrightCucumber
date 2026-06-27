@@ -60,7 +60,7 @@ When('{string} o checkbox {string}', async ({ pageContext }, acao: string, nome:
 // Validações
 // ──────────────────────────────────────────────────────────────
 
-Then('{string} {string} com a mensagem {string}', async ({ pageContext }, estado: string, tipo: string, mensagem: string) => {
+Then('valido se {string} {string} com mensagem {string}', async ({ pageContext }, estado: string, tipo: string, mensagem: string) => {
   // estado: VISUALIZO ou NAO VISUALIZO
   await pageContext.activePage.validarMensagem(estado, tipo, mensagem);
 });
@@ -80,8 +80,12 @@ Then('valido se checkbox {string} está {string}', async ({ pageContext }, nome:
   await pageContext.activePage.validarCheckboxEstado(nome, estado);
 });
 
-Then('valido que combobox {string} possui opções', async ({ pageContext }, nome: string, dataTable: any) => {
+Then('valido o combobox {string} com opções', async ({ pageContext }, nome: string, dataTable: any) => {
   await pageContext.activePage.validarOpcoesCombobox(nome, dataTable.hashes());
+});
+
+Then('valido o campo {string} com valor {string}', async ({ pageContext }, nome: string, valorEsperado: string) => {
+  await pageContext.activePage.validarValorCampo(nome, valorEsperado);
 });
 
 Then('valido os campos por label', async ({ pageContext }, dataTable: any) => {
@@ -89,11 +93,7 @@ Then('valido os campos por label', async ({ pageContext }, dataTable: any) => {
   await pageContext.activePage.validarCamposPorLabel(linhas);
 });
 
-Then('o campo {string} deve conter o valor {string}', async ({ pageContext }, nome: string, valorEsperado: string) => {
-  await pageContext.activePage.validarValorCampo(nome, valorEsperado);
-});
-
-// STEP ESPECÍFICO PARA HomePage. Teste para verificar se acessa corretamente método
+// STEP ESPECÍFICO PARA OVERRIDE HomePage. Teste para verificar se acessa corretamente método
 Then('valido que {string} co2 tem categoria {string}', async ({ pageContext }, nome: string, categoria: string) => {
   await pageContext.activePage.validarCategoriaProduto(nome, categoria);
 });
@@ -102,7 +102,7 @@ Then('valido que {string} co2 tem categoria {string}', async ({ pageContext }, n
 // API Tests
 // ──────────────────────────────────────────────────────────────
 
-Then('valido que endpoint {string} foi chamado', async ({ pageContext }, nome: string) => {
+Then('valido se endpoint {string} foi chamado', async ({ pageContext }, nome: string) => {
   await pageContext.activePage.validarEndpointChamado(nome);
 });
 

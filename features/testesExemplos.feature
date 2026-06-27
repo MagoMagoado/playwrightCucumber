@@ -5,8 +5,8 @@ Funcionalidade: Validações de teste
     Dado que acesso o sistema "QA"
     Quando clico no botão "Sign in"
     E que efetuo o login utilizando o usuário "Jane Doe"
-    Então "VISUALIZO" "TÍTULO" com a mensagem "My account"
-    E valido que endpoint "Dados Usuário" foi chamado
+    Então valido se "VISUALIZO" "TÍTULO" com mensagem "My account"
+    E valido se endpoint "Dados Usuário" foi chamado
     E valido se endpoint "Dados Usuário" contém em "first_name" valores
       | Jane |
     E valido se endpoint "Dados Usuário" contém em "address > city" valores
@@ -14,10 +14,10 @@ Funcionalidade: Validações de teste
   
   Cenário: Validações Filtro Home Geral
     Dado acesso o menu "Home"
-    E valido que endpoint "Produtos Home" foi chamado
+    E valido se endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
     Quando preencho o combobox "Filtro: Sort" com "Name (A - Z)"
-    E valido que combobox "Filtro: Sort" possui opções
+    E valido o combobox "Filtro: Sort" com opções
       | OPCAO              |
       | Name (A - Z)       |
       | Name (Z - A)       |
@@ -41,10 +41,10 @@ Funcionalidade: Validações de teste
       | Produto Nome | CAMPO | Angled Spanner     |
       | Produto Nome | CAMPO | Belt Sander        |
       | Produto Nome | CAMPO | Bolt Cutters       |
-    E o campo "Filtro: By category" deve conter o valor "By category:"
+    E valido o campo "Filtro: By category" com valor "By category:"
     Quando preencho o campo "Filtro: Search" com "Hammer"
     E clico no botão "Search"
-    Então "VISUALIZO" "Quantidade Produtos" com a mensagem "6 products found for 'Hammer'"
+    Então valido se "VISUALIZO" "Quantidade Produtos" com mensagem "6 products found for 'Hammer'"
     E valido se endpoint "Produtos Home" contém em "data[] > name" valores
       | Adjustable Wrench                     |
       | Angled Spanner                        |
@@ -66,7 +66,7 @@ Funcionalidade: Validações de teste
 
   Cenário: Validações Filtro Home Específicos
     Dado acesso o menu "Home"
-    E valido que endpoint "Produtos Home" foi chamado
+    E valido se endpoint "Produtos Home" foi chamado
     E que estou no documento "HOME"
     Quando "MARCO" o checkbox "Filtro: Hand Saw"
     Então valido se checkbox "Filtro: Hand Saw" está "MARCADO"
@@ -90,7 +90,7 @@ Funcionalidade: Validações de teste
       | Contact: Subject    | COMBOBOX | Customer service |
     E preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing"
     E clico no botão "Contact: Send"
-    Então "VISUALIZO" "ALERT" com a mensagem "Message must be minimal 50 characters"
+    Então valido se "VISUALIZO" "ALERT" com mensagem "Message must be minimal 50 characters"
     Quando preencho o campo "Contact: Message" com "Lorem ipsum dolor sit amet consectetur adipiscing."
     E clico no botão "Contact: Send"
-    Então "VISUALIZO" "ALERT" com a mensagem "Thanks for your message! We will contact you shortly."
+    Então valido se "VISUALIZO" "ALERT" com mensagem "Thanks for your message! We will contact you shortly."

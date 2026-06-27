@@ -230,13 +230,7 @@ export class CommonsPage {
       await expect(locator, `"${nome}" ainda está visível`).toBeHidden();
     }
   }
-
-  async validarValorCampo(nome: string, valorEsperado: string): Promise<void> {
-    const locator = this.toLocator(this.buscarElemento('CAMPO', nome));
-    await locator.scrollIntoViewIfNeeded();
-    expect(await locator.textContent()).toBe(valorEsperado);
-  }
-
+  
   async validarEstado(nome: string, estado: string): Promise<void> {
     const config = this.buscarElementoEmQualquerCategoria(nome);
     const locator = this.toLocator(config);
@@ -263,6 +257,12 @@ export class CommonsPage {
     for (const { OPCAO } of linhas) {
       await expect(opcoes.filter({ hasText: OPCAO.trim() })).toBeAttached();
     }
+  }
+
+  async validarValorCampo(nome: string, valorEsperado: string): Promise<void> {
+    const locator = this.toLocator(this.buscarElemento('CAMPO', nome));
+    await locator.scrollIntoViewIfNeeded();
+    expect(await locator.textContent()).toBe(valorEsperado);
   }
 
   // elementos que repetem o mesmo seletor com textos distintos (ex: lista de produtos).
