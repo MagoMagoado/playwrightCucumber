@@ -1,4 +1,5 @@
 # language: pt
+@local
 Funcionalidade: Validações de teste
 
   Contexto: Login Usuário Comum

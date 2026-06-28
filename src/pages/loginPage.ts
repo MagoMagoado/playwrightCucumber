@@ -26,9 +26,20 @@ export class LoginPage extends CommonsPage {
 
   async efetuarLogin(usuarioId: string): Promise<void> {
     const user = getUser(usuarioId);
-    await this.preencherCampo('Email', user.username);
+    let usuarioSauce = usuarioId === 'User Sauce';
+    const email = usuarioSauce ? 'Sauce: Username' : 'Email';
+    await this.preencherCampo(email, user.username);
     await this.preencherCampo('Password', user.password);
     await this.clicarBotao('Login');
     await this.aguardarCarregamentoPagina('login');
+  }
+
+  async desregistrarServiceWorkers(): Promise<void> {
+    await this.page.route('https://events.backtrace.io/**', route => route.fulfill({ status: 200, body: '{}' }));
+    await this.page.evaluate(async () => {
+      if (!navigator?.serviceWorker) return;
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map(r => r.unregister()));
+    });
   }
 }

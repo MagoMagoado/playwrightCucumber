@@ -3,18 +3,19 @@ import { type MapaElementos } from './elementRegistry';
 export const commonsElementos: MapaElementos = {
 
   BOTAO: {
-    'Sign in':        { seletor: '[data-test="nav-sign-in"]', texto: 'Sign in', exact: true },
-    'Login':          { seletor: '[data-test="login-submit"]', texto: 'Login', exact: true },
-    'Contact: Send':  '[data-test="contact-submit"]',
+    'Sign in': { seletor: '[data-test="nav-sign-in"]', texto: 'Sign in', exact: true },
+    'Login': { seletor: '[data-test^="login-"]', texto: 'Login', exact: true },
+    'Contact: Send': '[data-test="contact-submit"]',
   },
 
   CAMPO: {
-    'Email':                '#email',
-    'Password':             '#password',
-    'Contact: First name':  '[data-test="first-name"]',
-    'Contact: Last name':   '[data-test="last-name"]',
-    'Contact: Email':       '[data-test="email"]',
-    'Contact: Message':     '[data-test="message"]',
+    'Email': '#email',
+    'Sauce: Username': '#user-name',
+    'Password': '#password',
+    'Contact: First name': '[data-test="first-name"]',
+    'Contact: Last name': '[data-test="last-name"]',
+    'Contact: Email': '[data-test="email"]',
+    'Contact: Message': '[data-test="message"]',
   },
 
   COMBOBOX: {
@@ -24,16 +25,16 @@ export const commonsElementos: MapaElementos = {
   CHECKBOX: {},
 
   VALIDACAO: {
-    'ALERT':     '.alert',
-    'ERRO':      '.bfm-error-message',
+    'ALERT': '.alert',
+    'ERRO': '.bfm-error-message',
     'TÍTULO': { seletor: '.container h1', exact: false },
-    'SUBTÍTULO': { seletor: '.container h2', exact: false },
+    'SUBTÍTULO': { seletor: 'h2', exact: false },
   },
 
   MENUS_NAVEGACAO: {
     'Menu': '.navbar-nav',
     'Menu Principal': '.navbar-nav .nav-link',
-    'Submenu':        '.dropdown-menu a',
+    'Submenu': '.dropdown-menu a',
     'Menu Principal: Jane Doe': { seletor: '.navbar-nav .nav-link', texto: 'Jane Doe', exact: true },
   },
 

@@ -151,7 +151,9 @@ export class CommonsPage {
   async clicarBotao(nome: string): Promise<void> {
     const config = this.buscarElemento('BOTAO', nome);
     const locator = this.toLocator(config);
-    await expect(locator, `Botão "${nome}" não encontrado na página`).toBeVisible();
+    await expect(locator).toBeVisible().catch(() => {
+      throw new Error(`Botão "${nome}" não encontrado na página`);
+    });
     await locator.click();
 
     if (typeof config === 'object' && config.waitAfter) {
@@ -175,7 +177,9 @@ export class CommonsPage {
   async preencherCampo(nome: string, valor: string): Promise<void> {
     const config = this.buscarElemento('CAMPO', nome);
     const locator = this.toLocator(config);
-    await expect(locator, `Campo "${nome}" não encontrado na página`).toBeVisible();
+    await expect(locator).toBeVisible().catch(() => {
+      throw new Error(`Campo "${nome}" não encontrado na página`);
+    });
     await locator.clear();
     await locator.fill(valor);
   }
@@ -183,14 +187,18 @@ export class CommonsPage {
   async selecionarCombobox(nome: string, opcao: string): Promise<void> {
     const config = this.buscarElemento('COMBOBOX', nome);
     const locator = this.toLocator(config);
-    await expect(locator, `Combobox "${nome}" não encontrado na página`).toBeVisible();
+    await expect(locator).toBeVisible().catch(() => {
+      throw new Error(`Combobox "${nome}" não encontrado na página`);
+    });
     await locator.selectOption({ label: opcao });
   }
 
   async marcarCheckbox(marcar: string, nome: string): Promise<void> {
     const config = this.buscarElemento('CHECKBOX', nome);
     const locator = this.toLocator(config).locator('input[type="checkbox"]');
-    await expect(locator, `Checkbox "${nome}" não encontrado na página`).toBeVisible();
+    await expect(locator).toBeVisible().catch(() => {
+      throw new Error(`Checkbox "${nome}" não encontrado na página`);
+    });
     if (marcar === 'MARCO') {
       await locator.check();
     } else {

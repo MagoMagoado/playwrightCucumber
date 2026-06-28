@@ -4,6 +4,7 @@
   "description": "Automated tests - Playwright",
   "scripts": {
     "test": "npx bddgen && npx playwright test",
+    "test:ci/cd": "npx bddgen --tags \"not @local\" && npx playwright test",
     "test:headed": "npx bddgen && npx playwright test --headed",
     "test:debug": "npx bddgen && npx playwright test --debug",
     "test:ui": "npx bddgen && npx playwright test --ui",

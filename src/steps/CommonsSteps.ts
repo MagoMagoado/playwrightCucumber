@@ -16,6 +16,10 @@ Given('que acesso o sistema {string}', async ({ loginPage }, tipoAcesso: string)
   await loginPage.acessoSistema(tipoAcesso);
 });
 
+Given('desregistro os Service Workers', async ({ loginPage }) => {
+  await loginPage.desregistrarServiceWorkers();
+});
+
 When('que efetuo o login utilizando o usuário {string}', async ({ loginPage }, usuario: string) => {
   await loginPage.efetuarLogin(usuario);
 });

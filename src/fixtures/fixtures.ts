@@ -3,6 +3,7 @@ import { type Page } from '@playwright/test';
 import { CommonsPage } from '@pages/commonsPage';
 import { LoginPage } from '@pages/loginPage';
 import { HomePage } from '@pages/homePage';
+import { SaucePage } from '@pages/saucePage';
 
 /**
  * Controla qual page está ativa no cenário. O step "que estou no documento" chama ativarDocumento(),
@@ -19,6 +20,7 @@ export class PageContext {
     this.activePage = new CommonsPage(page);
     this.pages = new Map<string, () => CommonsPage>([
       ['HOME', () => new HomePage(page)],
+      ['SAUCE', () => new SaucePage(page)],
     ]);
   }
 
@@ -33,6 +35,8 @@ type Fixtures = {
   pageContext: PageContext;
   loginPage: LoginPage;
   homePage: HomePage;
+  // Apenas adicionar a Page caso tenha steps específicos para mesma, como em homeSteps
+  // saucePage: SaucePage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -45,7 +49,11 @@ export const test = base.extend<Fixtures>({
   homePage: async ({ pageContext }, use) => {
     pageContext.ativarDocumento('HOME');
     await use(pageContext.activePage as HomePage);
-  }
+  },
+  // saucePage: async ({ pageContext }, use) => {
+  //   pageContext.ativarDocumento('HOME');
+  //   await use(pageContext.activePage as SaucePage);
+  // }
 });
 
 export const { Given, When, Then } = createBdd(test);
