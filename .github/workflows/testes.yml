@@ -35,6 +35,8 @@ jobs:
       # Roda os testes ignorando features marcadas com @local
       - name: Rodar testes
         run: npm run test:ci/cd
+        env:
+          CI: true
 
       # Publica o relatório HTML como artefato — aparece na aba Actions do GitHub
       # Roda sempre, mesmo se os testes falharem, para você ver o que aconteceu
