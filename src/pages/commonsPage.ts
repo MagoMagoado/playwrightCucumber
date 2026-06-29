@@ -294,6 +294,7 @@ export class CommonsPage {
   // Endpoints
   // ──────────────────────────────────────────────────────────────
 
+  //ABA Aplicativo > Armazenamento > Armazenamento local
   private async obterTokenAuth(): Promise<string | null> {
     return this.page.evaluate(() => localStorage.getItem('auth-token'));
   }
@@ -305,16 +306,27 @@ export class CommonsPage {
 
   private async chamarEndpoint(nome: string): Promise<any> {
     const config = this.buscarElemento('ENDPOINT', nome);
-    if (typeof config === 'string') throw new Error(`Endpoint "${nome}" deve ser um objeto com seletor`);
+    if (typeof config === 'string') {
+      throw new Error(`Endpoint "${nome}" deve ser um objeto com seletor`);
+    }
+
     const url = this.urlCompleta(config.seletor);
+    const method = config.methodURL ?? 'GET';
     const token = await this.obterTokenAuth();
-    const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
-    const response = await this.page.request.get(url, { headers });
-    expect(response.ok(), `Endpoint "${nome}" retornou status ${response.status()}`).toBeTruthy();
+    const headers: Record<string, string> = token
+      ? { 'Authorization': `Bearer ${token}` }
+      : {};
+
+    const response = await this.page.request.fetch(url, { method, headers });
+    expect(
+      response.ok(),
+      `Endpoint "${nome}" retornou status ${response.status()}`
+    ).toBeTruthy();
+
     return response.json();
   }
 
-  async validarEndpointChamado(nome: string): Promise<void> {
+  async validarEndpointRetornaSucesso(nome: string): Promise<void> {
     await this.chamarEndpoint(nome);
   }
 
@@ -332,13 +344,17 @@ export class CommonsPage {
       if (atual.endsWith('[]')) {
         const chaveArray = atual.slice(0, -2);
         const array = obj?.[chaveArray];
-        if (!Array.isArray(array)) throw new Error(`"${chaveArray}" não é um array na resposta de "${nome}"`);
+            if (!Array.isArray(array)) {
+          throw new Error(`"${chaveArray}" não é um array na resposta de "${nome}"`);
+        }
         return array.map((item: any) => navegarCaminho(item, restante));
       }
       return navegarCaminho(obj?.[atual], restante);
     };
     const dadosEncontrados = navegarCaminho(body, segmentos);
-    if (dadosEncontrados === undefined) throw new Error(`Chave "${chave}" não encontrada na resposta de "${nome}"`);
+    if (dadosEncontrados === undefined) {
+      throw new Error(`Chave "${chave}" não encontrada na resposta de "${nome}"`);
+    }
 
     // 3. Compara os valores encontrados com os esperados
     const listaEncontrados: string[] = Array.isArray(dadosEncontrados)

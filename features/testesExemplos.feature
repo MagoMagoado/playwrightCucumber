@@ -7,7 +7,7 @@ Funcionalidade: Validações de teste
     Quando clico no botão "Sign in"
     E que efetuo o login utilizando o usuário "Jane Doe"
     Então valido se "VISUALIZO" "TÍTULO" com mensagem "My account"
-    E valido se endpoint "Dados Usuário" foi chamado
+    E valido se endpoint "Dados Usuário" retorna sucesso
     E valido se endpoint "Dados Usuário" contém em "first_name" valores
       | Jane |
     E valido se endpoint "Dados Usuário" contém em "address > city" valores
@@ -15,7 +15,7 @@ Funcionalidade: Validações de teste
   
   Cenário: Validações Filtro Home Geral
     Dado acesso o menu "Home"
-    E valido se endpoint "Produtos Home" foi chamado
+    E valido se endpoint "Produtos Home" retorna sucesso
     E que estou no documento "HOME"
     Quando preencho o combobox "Filtro: Sort" com "Name (A - Z)"
     E valido o combobox "Filtro: Sort" com opções
@@ -67,7 +67,7 @@ Funcionalidade: Validações de teste
 
   Cenário: Validações Filtro Home Específicos
     Dado acesso o menu "Home"
-    E valido se endpoint "Produtos Home" foi chamado
+    E valido se endpoint "Produtos Home" retorna sucesso
     E que estou no documento "HOME"
     Quando "MARCO" o checkbox "Filtro: Hand Saw"
     Então valido se checkbox "Filtro: Hand Saw" está "MARCADO"

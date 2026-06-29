@@ -5,7 +5,7 @@ type ElementoOpcoes = {
   waitBefore?: 'networkidle' | 'loader' | 'navigation' | 'login';
   texto?: string;
   exact?: boolean;
-  methodURL?: string;
+  methodURL?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 };
 
 /**

@@ -106,8 +106,8 @@ Then('valido que {string} co2 tem categoria {string}', async ({ pageContext }, n
 // API Tests
 // ──────────────────────────────────────────────────────────────
 
-Then('valido se endpoint {string} foi chamado', async ({ pageContext }, nome: string) => {
-  await pageContext.activePage.validarEndpointChamado(nome);
+Then('valido se endpoint {string} retorna sucesso', async ({ pageContext }, nome: string) => {
+  await pageContext.activePage.validarEndpointRetornaSucesso(nome);
 });
 
 Then('valido se endpoint {string} contém em {string} valores', async ({ pageContext }, nome: string, chave: string, dataTable: any) => {
