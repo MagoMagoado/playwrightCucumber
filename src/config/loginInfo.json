@@ -11,6 +11,10 @@
     "username": "customer2@practicesoftwaretesting.com",
     "password": "welcome01"
   },
+  "Fulano": {
+    "username": "fulano.silva@email.com",
+    "password": "Fulano@2024"
+  },
   "User Sauce": {
     "username": "standard_user",
     "password": "secret_sauce"

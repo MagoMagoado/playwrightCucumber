@@ -1,15 +1,18 @@
 {
-  "QA": {
+  "ToolShop": {
     "base1": {
       "baseUrl": "https://practicesoftwaretesting.com/"
     },
-    "base2": {
-      "baseUrl": "..."
+    "baseAPI": {
+      "baseUrl": "https://api.practicesoftwaretesting.com"
     }
   },
   "saucedemo": {
     "base1": {
       "baseUrl": "https://www.saucedemo.com"
+    },
+    "baseAPI": {
+      "baseUrl": "..."
     }
   }
 }

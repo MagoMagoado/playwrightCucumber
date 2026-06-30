@@ -1,17 +1,18 @@
 # language: pt
 @local
+@registrar-fulano-api
 Funcionalidade: Validações de teste
 
   Contexto: Login Usuário Comum
-    Dado que acesso o sistema "QA"
+    Dado que acesso o sistema "ToolShop"
     Quando clico no botão "Sign in"
-    E que efetuo o login utilizando o usuário "Jane Doe"
+    E que efetuo o login utilizando o usuário "Fulano"
     Então valido se "VISUALIZO" "TÍTULO" com mensagem "My account"
     E valido se endpoint "Dados Usuário" retorna sucesso
     E valido se endpoint "Dados Usuário" contém em "first_name" valores
-      | Jane |
+      | Fulano    |
     E valido se endpoint "Dados Usuário" contém em "address > city" valores
-      | Vienna |
+      | São Paulo |
   
   Cenário: Validações Filtro Home Geral
     Dado acesso o menu "Home"

@@ -11,7 +11,8 @@ src/
   elements/       # Mapeamento de seletores por página
   fixtures/       # Configuração dos fixtures e PageContext
   pages/          # Classes de página (CommonsPage e filhas)
-  steps/          # Definições de steps Cucumber
+  setupAPI/       # Dados e lógica de setup/teardown via API
+  steps/          # Definições de steps Cucumber e hooks
 features/         # Arquivos .feature com os cenários em português
 ```
 
@@ -51,6 +52,22 @@ COMBOBOX, CHECKBOX, VALIDACAO, MENUS_NAVEGACAO, ENDPOINT, SLIDER
 ```
 
 `commonsElements.ts` contém elementos compartilhados por todas as páginas e é carregado automaticamente pelo constructor de `CommonsPage`.
+
+### SetupAPI (`src/setupAPI/`)
+
+Cria e destrói dados de teste via API, sem passar pela interface. Composto por:
+
+- **`usuarioDados.ts`** — dados centralizados usados nas requisições (credenciais, payload de criação de usuário)
+- **`usuarioSetup.ts`** — classe `UsuarioSetup` com os métodos `registrar()` e `deletar()`
+
+### Hooks (`src/steps/hooks.ts`)
+
+Controlam setup e teardown por tag, sem que isso precise estar no `.feature`. A tag `@registrar-fulano-api` ativa o `Before` (registrar usuário) e o `After` (deletar usuário). Quando aplicada na `Funcionalidade`, vale para todos os cenários do arquivo.
+
+```gherkin
+@registrar-fulano-api
+Funcionalidade: Validações de teste  ← Before/After rodam em cada cenário desta feature
+```
 
 ---
 

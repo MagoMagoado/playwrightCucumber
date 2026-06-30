@@ -92,7 +92,56 @@ A partir daí, todos os steps genéricos delegam para `pageContext.activePage`, 
 
 ---
 
-## 5. Steps — a ponte entre o Gherkin e as pages
+## 5. SetupAPI — preparação de ambiente via API
+
+**Arquivos:** `src/setupAPI/usuarioDados.ts`, `src/setupAPI/usuarioSetup.ts`
+
+Camada responsável por criar e destruir dados de teste diretamente via API, sem passar pela interface. Isso garante um ambiente limpo e previsível antes de cada cenário que dependa de um usuário cadastrado.
+
+**`usuarioDados.ts`** mapeia os dados usados nas requisições, seguindo o mesmo espírito dos arquivos de elements — os dados ficam centralizados e separados da lógica:
+
+```ts
+LOGIN_ADMIN: { email: '...', password: '...' },
+CREATE_USER: {
+  DEFAULT: { first_name: 'Fulano', email: '...', ... }
+}
+```
+
+**`usuarioSetup.ts`** — classe `UsuarioSetup` com dois métodos:
+
+- `registrar()` — encadeia 3 requisições: `POST /users/register` → `POST /users/login` → `GET /users/me`. Salva o `userId` como atributo privado para uso posterior. Se o registro retornar 409 (usuário já existe), lança erro explícito indicando que o cleanup do cenário anterior pode ter falhado.
+- `deletar()` — loga como admin via `POST /users/login` para obter um token com permissão de deleção, depois executa `DELETE /users/{userId}`. O usuário comum não tem permissão para deletar a si mesmo (403), por isso o admin é necessário.
+
+A `baseUrl` é um atributo `private readonly` da classe, resolvida via `getBaseApi()` do `config.ts`.
+
+---
+
+## 6. Hooks — setup e teardown por tag
+
+**Arquivo:** `src/steps/hooks.ts`
+
+Os hooks controlam o que acontece antes e depois de um cenário, sem que isso precise estar descrito no `.feature`. Eles são ativados por tag:
+
+```ts
+Before({ tags: '@registrar-fulano-api' }) → usuarioSetup.registrar()
+After({ tags: '@registrar-fulano-api' })  → usuarioSetup.deletar()
+```
+
+A instância de `UsuarioSetup` é compartilhada entre o `Before` e o `After` intencionalmente — é assim que o `userId` gerado no `registrar()` fica disponível no `deletar()`. Isso funciona corretamente porque os cenários rodam em sequência (1 worker).
+
+A tag pode ser aplicada em um cenário individual ou na `Funcionalidade` inteira. Quando aplicada na `Funcionalidade`, o `Before` e o `After` rodam para **cada cenário** do arquivo — o usuário é criado antes e deletado após cada um.
+
+```gherkin
+@registrar-fulano-api
+Funcionalidade: Validações de teste   ← aplica o hook em todos os cenários desta feature
+
+  Cenário: Validações Filtro Home     ← Before roda antes, After roda depois
+  Cenário: Validações Aba Contact     ← idem
+```
+
+---
+
+## 7. Steps — a ponte entre o Gherkin e as pages
 
 **Arquivos:** `src/steps/commonsSteps.ts`, `src/steps/homeSteps.ts`
 

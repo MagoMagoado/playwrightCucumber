@@ -18,7 +18,8 @@
       "@steps/*":    ["src/steps/*"],
       "@fixtures/*": ["src/fixtures/*"],
       "@elements/*": ["src/elements/*"],
-      "@config/*":   ["src/config/*"]
+      "@config/*":   ["src/config/*"],
+      "@setupAPI/*": ["src/setupAPI/*"]
     }
   },
   "include": ["src/**/*", "playwright.config.ts"],
